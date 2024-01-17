@@ -4,18 +4,24 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <map>
+#include <tuple>
+#include <vector>
 #include "bogie.hpp"
 #define BOGIES_NR 5
+
+namespace Mine
+{
 class Mine
 {
 private:
-    std::map <int, Bogie> scheme;       // czas + taczka
+    std::vector <Bogie> scheme;       // czas + taczka
 
 public:
     Mine(/* args */);
     ~Mine();
     int InitScheme(std::string name);
 };
+} // Mine namespace
+
 
 #endif  // MINE_HPP

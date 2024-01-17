@@ -15,7 +15,7 @@ int main(int argc, char * argv [])
 
     std::string fileNamePass = argv[1];
 
-    Mine mine;
+    Mine::Mine mine;
 
     int initState = mine.InitScheme(fileNamePass);
     if(initState == EXIT_FAILURE)
