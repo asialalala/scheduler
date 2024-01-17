@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.22)
+
+project(Scheduler LANGUAGES CXX)
+
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/Build)
+
+add_executable(scheduler Src/main.cpp Src/mine.cpp Src/bogie.cpp)
+
+target_include_directories(scheduler PUBLIC ${CMAKE_SOURCE_DIR}/Inc)

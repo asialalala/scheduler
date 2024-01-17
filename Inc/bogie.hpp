@@ -1,22 +1,15 @@
 #ifndef BOOGIE_HPP
 #define BOOGIE_HPP
 
-
-class bogie
+#include <iostream>
+class Bogie
 {
 private:
     /* data */
 public:
-    bogie(/* args */);
-    ~bogie();
+    Bogie(/* args */);
+    ~Bogie();
 };
 
-bogie::bogie(/* args */)
-{
-}
 
-bogie::~bogie()
-{
-}
-
-#endif
+#endif  // BOOGIE_HPP

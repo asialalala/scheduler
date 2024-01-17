@@ -1,6 +1,9 @@
 // in Build
 // ./scheduler.out ../Data/data.txt
+
 #include <iostream>
+#include <string>
+#include "../Inc/mine.hpp"
 
 int main(int argc, char * argv [])
 {
@@ -10,14 +13,11 @@ int main(int argc, char * argv [])
         return EXIT_FAILURE;
     }
 
-    char *fileNamePass = argv[1];
-    FILE *fPass = fopen(fileNamePass, "r");
+    std::string fileNamePass = argv[1];
 
-    if (!fPass)
-    {
-        fprintf(stderr, "Blad. Nie otwarto pliku. '%s'\n", fileNamePass);
-        return EXIT_FAILURE;
-    }
+    Mine mine;
+
+    mine.InitBoogies(fileNamePass);
 
     return EXIT_SUCCESS;
 }

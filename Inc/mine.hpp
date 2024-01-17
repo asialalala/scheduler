@@ -1,20 +1,20 @@
 #ifndef MINE_HPP
 #define MINE_HPP
-class mine
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "bogie.hpp"
+#define BOGIES_NR 5
+class Mine
 {
 private:
-    /* data */
+    Bogie boogiesTab[BOGIES_NR];
+
 public:
-    mine(/* args */);
-    ~mine();
+    Mine(/* args */);
+    ~Mine();
+    void InitBoogies(std::string name);
 };
 
-mine::mine(/* args */)
-{
-}
-
-mine::~mine()
-{
-}
-
-#endif
+#endif  // MINE_HPP
