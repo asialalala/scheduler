@@ -14,7 +14,7 @@ private:
     Game m_game;
     int m_weight;
     int m_amount;
-    int m_time;
+    int m_duration;
 
 public:
     Bogie();
@@ -24,13 +24,13 @@ public:
     void setGame(Game game){m_game = game;};
     void setWeight(int weight){m_weight = weight;};
     void setAmount(int amount){m_amount = amount;};
-    void setTime(int time){m_time = time;};
+    void setDuration(int time){m_duration = time;};
 
     int getID() const {return m_ID;};
     Game getGame() const {return m_game;};
     int getWeight() const {return m_weight;};
     int getAmount() const {return m_amount ;};
-    int getTime() const {return m_time;};
+    int getDuration() const {return m_duration;};
 };
 
 

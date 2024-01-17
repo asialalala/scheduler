@@ -10,12 +10,12 @@
 class Mine
 {
 private:
-    std::map <int, Bogie> scheme;
+    std::map <int, Bogie> scheme;       // czas + taczka
 
 public:
     Mine(/* args */);
     ~Mine();
-    int InitBoogies(std::string name);
+    int InitScheme(std::string name);
 };
 
 #endif  // MINE_HPP
