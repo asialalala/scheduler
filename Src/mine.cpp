@@ -1,6 +1,5 @@
 #include "../Inc/mine.hpp"
 
-
 Mine::Mine(/* args */)
 {
     std::cout << "Kopalnia uruchomiona\n";
@@ -13,5 +12,15 @@ Mine::~Mine()
 
 void Mine::InitBoogies(std::string name)
 {
-    std::ofstream myfile("blabla.txt");
+    std::cout << "Kopalnia wczytuje stan wagonikow.\n";
+    std::string line;
+    std::ifstream myfile(name);
+    if (myfile.is_open())
+    {
+        while ( getline(myfile,line) )
+        {
+        std::cout << line << '\n';
+        }
+        myfile.close();
+    }
 }
