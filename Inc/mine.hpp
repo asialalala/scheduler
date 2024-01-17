@@ -4,12 +4,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
 #include "bogie.hpp"
 #define BOGIES_NR 5
 class Mine
 {
 private:
-    Bogie boogiesTab[BOGIES_NR];
+    std::map <int, Bogie> scheme;
 
 public:
     Mine(/* args */);

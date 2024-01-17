@@ -19,7 +19,7 @@ int Mine::InitBoogies(std::string name)
     {
         while ( getline(myfile,line) )
         {
-        std::cout << line << '\n';
+            std::cout << line << '\n';
         }
         myfile.close();
     }else{
