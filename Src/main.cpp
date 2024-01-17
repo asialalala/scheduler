@@ -17,7 +17,9 @@ int main(int argc, char * argv [])
 
     Mine mine;
 
-    mine.InitBoogies(fileNamePass);
+    int initState = mine.InitBoogies(fileNamePass);
+    if(initState == EXIT_FAILURE)
+        return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
 }

@@ -2,7 +2,7 @@
 
 Mine::Mine(/* args */)
 {
-    std::cout << "Kopalnia uruchomiona\n";
+    std::cout << "Kopalnia uruchomiona.\n";
 }
 
 Mine::~Mine()
@@ -10,7 +10,7 @@ Mine::~Mine()
     std::cout << "Kopalnia zamyka dzialalnosc.\n";
 }
 
-void Mine::InitBoogies(std::string name)
+int Mine::InitBoogies(std::string name)
 {
     std::cout << "Kopalnia wczytuje stan wagonikow.\n";
     std::string line;
@@ -22,5 +22,10 @@ void Mine::InitBoogies(std::string name)
         std::cout << line << '\n';
         }
         myfile.close();
+    }else{
+        std::cout << "Nie udalo sie otworzyc pliku: " << name << std::endl;
+        return EXIT_FAILURE;
     }
+    
+    return EXIT_SUCCESS;
 }

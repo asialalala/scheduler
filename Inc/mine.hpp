@@ -14,7 +14,7 @@ private:
 public:
     Mine(/* args */);
     ~Mine();
-    void InitBoogies(std::string name);
+    int InitBoogies(std::string name);
 };
 
 #endif  // MINE_HPP
