@@ -21,5 +21,7 @@ int main(int argc, char * argv [])
     if(initState == EXIT_FAILURE)
         return EXIT_FAILURE;
 
+    mine.Report();
+
     return EXIT_SUCCESS;
 }

@@ -11,15 +11,18 @@
 
 namespace Mine
 {
+
+    typedef std::vector<Bogie::Bogie> Scheme;
 class Mine
 {
 private:
-    std::vector <Bogie> scheme;       // czas + taczka
+    Scheme scheme;       // czas + taczka
 
 public:
     Mine(/* args */);
     ~Mine();
     int InitScheme(std::string name);
+    void Report() ;
 };
 } // Mine namespace
 

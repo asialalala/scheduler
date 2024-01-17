@@ -1,5 +1,6 @@
 #include "../Inc/mine.hpp"
 #include <vector>
+#include <iterator>
 
 Mine::Mine::Mine(/* args */)
 {
@@ -22,53 +23,38 @@ int Mine::Mine::InitScheme(std::string name)
     std::string game = "";
     int weight = 0;
     int amount = 0;
-    int duration = 0;
     int i = 0;
 
     if (myfile.is_open())
     {
         while ( getline(myfile,line) )
         {
-            // std::cout << "====================================\n";
-            // std::cout << line << '\n';
-
             spacePlace = line.find(' ');
-            // std::cout << spacePlace << std::endl;
             time = stoi(line.substr(0,spacePlace));
             line.erase(0, spacePlace + 1);  // usun przeczytana wartosc i spacje
-            // std::cout << "czas: " << time << std::endl;
 
             spacePlace = line.find(' ');
             while(spacePlace >= 0)
             {
-                // std::cout << line << std::endl;
-                // std::cout << "------------\n";
-                
-                // std::cout << line << std::endl;
-                // std::cout << spacePlace << std::endl;
                 ID = stoi(line.substr(0,spacePlace));
                 line.erase(0, spacePlace + 1); // usun przeczytana wartosc i spacje
-                // std::cout << "ID: " << ID << std::endl;
 
                 spacePlace = line.find(' ');
                 game = line.substr(0,spacePlace);
                 line.erase(0, spacePlace + 1);
-                // std::cout << "kamien: " << game << std::endl;
 
                 spacePlace = line.find(' ');
                 weight = stoi(line.substr(0,spacePlace));
                 line.erase(0, spacePlace + 1);
-                // std::cout << "ciezar " << weight << std::endl;
 
                 spacePlace = line.find(' ');
                 amount = stoi(line.substr(0,spacePlace));
                 line.erase(0, spacePlace + 1);
-                // std::cout << "ilosc " << amount << std::endl; 
 
                 spacePlace = line.find(' ');     
 
-                scheme.push_back(   Bogie(time, ID, game, weight,
-                                    amount, duration));
+                scheme.push_back(   Bogie::Bogie(time, ID, game, weight,
+                                    amount));
             }
 
         }
@@ -80,4 +66,31 @@ int Mine::Mine::InitScheme(std::string name)
     }
     
     return EXIT_SUCCESS;
+}
+
+void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
+{
+    std::cout << "=====================================================\n";
+    
+    int time = -1;
+    for(Scheme::iterator it = scheme.begin(); it != scheme.end(); it++)
+    {
+        if(time == it->getStartTime())
+        {
+            std::cout << "oraz " << " pojawila sie taczka nr "
+            << it->getID() << " zawierajaca " << it->getAmount() << " kamieni typu " 
+            << it->getGameName() << " o wadze " << it->getWeight() << ", jej rozpakowanie potrwa "
+            << it->getDuration() << " minut.\n";
+        }else{ 
+            std::cout << "W minucie " << it->getStartTime() << " pojawila sie taczka nr "
+            << it->getID() << " zawierajaca " << it->getAmount() << " kamieni typu " 
+            << it->getGameName() << " o wadze " << it->getWeight() << ", jej rozpakowanie potrwa "
+            << it->getDuration() << " minut.\n";
+        }
+        
+        time = it->getStartTime();
+
+    }
+
+    std::cout << "=====================================================\n";
 }
