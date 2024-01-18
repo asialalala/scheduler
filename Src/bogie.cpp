@@ -12,19 +12,19 @@ Bogie::Bogie::Bogie(   int startTime, int ID,
     
     int result = gameName.compare("rubiny");
     if(result == 0)
-        m_game = Game::rubiny;
+        m_game = rubiny;
     
     result = gameName.compare("agaty");
     if(result == 0)
-        m_game = Game::agaty;
+        m_game = agaty;
     
     result = gameName.compare("zloto");
     if(result == 0)
-        m_game = Game::zloto;
+        m_game = zloto;
 
     result = gameName.compare("turkus");
     if(result == 0)
-        m_game = Game::turkus;
+        m_game = turkus;
     
 }
 
@@ -32,13 +32,13 @@ std::string Bogie::Bogie::getGameName() const
 {
     switch(m_game)
     {
-        case Game::agaty :
+        case agaty :
             return "agat";
-        case Game::rubiny :
+        case rubiny :
             return "rubin";
-        case Game::zloto :
+        case zloto :
             return "zloto";
-        case Game::turkus :
+        case turkus :
             return "turkus";
         default : 
             return "niezdefiniowany";

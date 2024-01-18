@@ -24,7 +24,7 @@ int Mine::Mine::MineInit(char * argv [])
         }        
     }
 
-    int robotsNr = atoi(argv[1]);
+    m_robotsNr = atoi(argv[1]);
 
     for(int i = 0; i < strlen(argv[2]); i++)
     {
@@ -35,7 +35,7 @@ int Mine::Mine::MineInit(char * argv [])
         }        
     }
 
-    int timeQuantum = atoi(argv[2]);
+    m_timeQuantum = atoi(argv[2]);
 
     for(int i = 0; i < strlen(argv[2]); i++)
     {
@@ -45,7 +45,21 @@ int Mine::Mine::MineInit(char * argv [])
             return EXIT_FAILURE;
         }        
     }
-    int strategyName = atoi(argv[4]);
+
+    switch (atoi(argv[4]))
+    {
+    case 1:
+        m_strategyName = RR;
+        break;
+    
+    case 2:
+        m_strategyName = FCFS;
+        break;
+
+    default:    
+        std::cout << "Niepoprwany typ strategii.\n";
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
@@ -91,7 +105,7 @@ int Mine::Mine::InitScheme(std::string name)
 
                 spacePlace = line.find(' ');     
 
-                scheme.push_back(   Bogie::Bogie(time, ID, game, weight,
+                m_scheme.push_back( Bogie::Bogie(time, ID, game, weight,
                                     amount));
             }
 
@@ -111,7 +125,7 @@ void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
     std::cout << "=====================================================\n";
     
     int time = -1;
-    for(Scheme::iterator it = scheme.begin(); it != scheme.end(); it++)
+    for(Scheme::iterator it = m_scheme.begin(); it != m_scheme.end(); it++)
     {
         if(time == it->getStartTime())
         {

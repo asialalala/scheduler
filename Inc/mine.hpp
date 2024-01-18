@@ -13,10 +13,17 @@ namespace Mine
 {
 
     typedef std::vector<Bogie::Bogie> Scheme;
+    enum Strategy{
+        RR,
+        FCFS
+    };
 class Mine
 {
 private:
-    Scheme scheme;       // czas + taczka
+    Scheme m_scheme;       // czas + taczka
+    Strategy m_strategyName;
+    int m_timeQuantum;
+    int m_robotsNr;
 
 public:
     Mine();
