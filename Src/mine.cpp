@@ -95,7 +95,7 @@ int Mine::Mine::InitScheme()
                    << "lub wpisac koniec, aby zakonczyc.\n";
         std::cin >> temp;
 
-        m_scheme.push_back( Bogie::Bogie(time, ID, game, weight,
+        m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
                             amount));
     }while(temp.compare("koniec") != 0);
 
@@ -143,7 +143,7 @@ int Mine::Mine::InitScheme(std::string name)
 
                 spacePlace = line.find(' ');     
 
-                m_scheme.push_back( Bogie::Bogie(time, ID, game, weight,
+                m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
                                     amount));
             }
 
@@ -163,7 +163,7 @@ void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
     std::cout << "=====================================================\n";
     
     int time = -1;
-    for(Scheme::iterator it = m_scheme.begin(); it != m_scheme.end(); it++)
+    for(Bogie::BogieContainer::iterator it = m_bogieContainer.begin(); it != m_bogieContainer.end(); it++)
     {
         if(time == it->getStartTime())
         {

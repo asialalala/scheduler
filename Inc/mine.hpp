@@ -7,31 +7,30 @@
 #include <tuple>
 #include <vector>
 #include "bogie.hpp"
-#define BOGIES_NR 5
+#include "robot.hpp"
 
 namespace Mine
 {
-
-    typedef std::vector<Bogie::Bogie> Scheme;
     enum Strategy{
         RR,
         FCFS
     };
 class Mine
 {
-private:
-    Scheme m_scheme;       // czas + taczka
-    Strategy m_strategyName;
-    int m_timeQuantum;
-    int m_robotsNr;
-
-public:
-    Mine();
-    ~Mine();
-    int MineInit(char * argv []);
-    int InitScheme();
-    int InitScheme(std::string name);
-    void Report() ;
+    private:
+        Bogie::BogieContainer m_bogieContainer;
+        Strategy m_strategyName;
+        Robot::RobotsContainer m_robotsContainer;
+        int m_timeQuantum;
+        int m_robotsNr;
+    
+    public:
+        Mine();
+        ~Mine();
+        int MineInit(char * argv []);
+        int InitScheme();
+        int InitScheme(std::string name);
+        void Report() ;
 };
 } // Mine namespace
 
