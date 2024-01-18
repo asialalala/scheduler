@@ -19,8 +19,9 @@ private:
     Scheme scheme;       // czas + taczka
 
 public:
-    Mine(/* args */);
+    Mine();
     ~Mine();
+    int MineInit(char * argv []);
     int InitScheme(std::string name);
     void Report() ;
 };

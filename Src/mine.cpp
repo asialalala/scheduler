@@ -12,6 +12,44 @@ Mine::Mine::~Mine()
     std::cout << "Kopalnia zamyka dzialalnosc.\n";
 }
 
+int Mine::Mine::MineInit(char * argv [])
+{
+    // wczytanie parametrow programu
+    for(int i = 0; i < strlen(argv[1]); i++)
+    {
+        if(!isdigit(argv[1][i]))
+        {
+            std::cout << "Niepoprwana ilosc robotow.\n";
+            return EXIT_FAILURE;
+        }        
+    }
+
+    int robotsNr = atoi(argv[1]);
+
+    for(int i = 0; i < strlen(argv[2]); i++)
+    {
+        if(!isdigit(argv[2][i]))
+        {
+            std::cout << "Niepoprwany kwant czasu.\n";
+            return EXIT_FAILURE;
+        }        
+    }
+
+    int timeQuantum = atoi(argv[2]);
+
+    for(int i = 0; i < strlen(argv[2]); i++)
+    {
+        if(!isdigit(argv[2][i]))
+        {
+            std::cout << "Niepoprwany typ strategii.\n";
+            return EXIT_FAILURE;
+        }        
+    }
+    int strategyName = atoi(argv[4]);
+
+    return EXIT_SUCCESS;
+}
+
 int Mine::Mine::InitScheme(std::string name)
 {
     std::cout << "Kopalnia wczytuje harmonogram.\n";
