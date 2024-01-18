@@ -2,7 +2,7 @@
 #include <vector>
 #include <iterator>
 
-Mine::Mine::Mine(/* args */)
+Mine::Mine::Mine()
 {
     std::cout << "Kopalnia uruchomiona.\n";
 }
