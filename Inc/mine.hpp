@@ -29,6 +29,7 @@ public:
     Mine();
     ~Mine();
     int MineInit(char * argv []);
+    int InitScheme();
     int InitScheme(std::string name);
     void Report() ;
 };

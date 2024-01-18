@@ -64,6 +64,44 @@ int Mine::Mine::MineInit(char * argv [])
     return EXIT_SUCCESS;
 }
 
+int Mine::Mine::InitScheme()
+{
+    std::cout << "Kopalnia wczytuje harmonogram.\n";
+    std::string temp = "";
+    int spacePlace = 0;
+    int time = 0;
+    int ID = 0;
+    std::string game = "";
+    int weight = 0;
+    int amount = 0;
+    
+    do{     // przydaloby sie zrobic input validation
+        std::cout << "Prosze podac minute, w ktorej przybyla taczka.\n";
+        std::cin >> temp;
+        time = stoi(temp);
+        std::cout << "Prosze podac ID taczki.\n";
+        std::cin >> temp;
+        ID = stoi(temp);
+        std::cout << "Prosze podac zawarte w taczce kamienie.\n";
+        std::cin >> temp;
+        game = temp;
+        std::cout << "Prosze podac ilosc kamieni.\n";
+        std::cin >> temp;
+        weight = stoi(temp);
+        std::cout << "Prosze podac wage kamienia.\n";
+        std::cin >> temp;
+        amount = stoi(temp);
+        std::cout << "Prosze podac jakikolwiek znak, aby podac wiecej informacji o taczkach\n"
+                   << "lub wpisac koniec, aby zakonczyc.\n";
+        std::cin >> temp;
+
+        m_scheme.push_back( Bogie::Bogie(time, ID, game, weight,
+                            amount));
+    }while(temp.compare("koniec") != 0);
+
+    return EXIT_SUCCESS;
+}
+
 int Mine::Mine::InitScheme(std::string name)
 {
     std::cout << "Kopalnia wczytuje harmonogram.\n";

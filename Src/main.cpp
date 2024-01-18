@@ -1,5 +1,5 @@
 // in Build
-// ./scheduler.out ../Data/data.txt
+// ./scheduler 2 1 ../Data/data.txt 2
 
 #include <iostream>
 #include <string>
@@ -16,12 +16,18 @@ int main(int argc, char * argv [])
 
     std::string fileNamePass = argv[3];
     Mine::Mine mine;
-    
+
     if(mine.MineInit(argv) == EXIT_FAILURE)
         return EXIT_FAILURE;
 
-    if(mine.InitScheme(fileNamePass) == EXIT_FAILURE)
+    if(fileNamePass == "-")
+    {
+        if(mine.InitScheme() == EXIT_FAILURE)
         return EXIT_FAILURE;
+    }else{
+        if(mine.InitScheme(fileNamePass) == EXIT_FAILURE)
+        return EXIT_FAILURE;
+    }
 
     mine.Report();
 
