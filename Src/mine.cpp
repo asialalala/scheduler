@@ -180,7 +180,7 @@ void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
             << it->getGameName() << " o wadze " << it->getWeight() << ", jej rozpakowanie potrwa "
             << it->getDuration() << " minut.\n";
         }
-        
+    
         time = it->getStartTime();
 
     }
