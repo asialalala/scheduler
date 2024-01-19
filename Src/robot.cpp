@@ -4,6 +4,7 @@ Robot::Robot::Robot()
 {
     m_pBogie = nullptr;
     m_workingTime = 0;
+    m_outOfWorkState = true;
 }
 
 int Robot::Robot::IncreaseWorkingTime()
@@ -32,6 +33,7 @@ Bogie::Bogie* Robot::Robot::FinishJob()
     Bogie::Bogie* temp;
     temp = m_pBogie;
     m_pBogie = nullptr;
+    m_outOfWorkState = true;
     return temp;    // zwroc wskaznik na wzek, z ktorym pracowalej
 }
 
@@ -45,6 +47,7 @@ bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie )
     }
     // std::cout << "Robot zaczyna prace\n";
     m_pBogie = pBogie;
+    m_outOfWorkState = false;
     return true;
 }
 
@@ -66,4 +69,9 @@ int const Robot::Robot::getTimeToEnd() const
     }
     //  std::cout << "Czas do zakonczone " << m_pBogie->getDuration()<< " - " <<  m_workingTime << " = " <<  m_pBogie->getDuration() - m_workingTime <<std::endl ;
     return m_pBogie->getDuration() - m_workingTime;
+}
+
+bool Robot::Robot::getOutOfWorkState()
+{
+    return m_outOfWorkState;
 }

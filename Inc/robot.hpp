@@ -10,6 +10,7 @@ namespace Robot
     private:
         Bogie::Bogie *m_pBogie; // wagonik, ktory obsluguje robot
         int m_workingTime;
+        bool m_outOfWorkState;
     public:
         Robot();
         ~Robot(){};
@@ -18,6 +19,8 @@ namespace Robot
         bool StartJob(Bogie::Bogie* const pBogie);
         Bogie::Bogie* getBogie();
         int const getTimeToEnd() const;
+        bool getOutOfWorkState();
+        
     };
 
     typedef std::vector<Robot> RobotsContainer;

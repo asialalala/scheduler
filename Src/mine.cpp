@@ -2,9 +2,11 @@
 #include <vector>
 #include <iterator>
 
+#define MAX_LENGTH 15 // czy tutaj?
+
 Mine::Mine::Mine(int robotsNr)
 {
-    std::cout << "Kopalnia uruchomiona.\n";
+    std::cout << "Kopalnia uruchomiona." << std::endl;
     m_robotsNr = robotsNr;
     for (size_t i = 0; i < m_robotsNr; i++)
     {
@@ -15,7 +17,7 @@ Mine::Mine::Mine(int robotsNr)
 
 Mine::Mine::~Mine()
 {
-    std::cout << "Kopalnia zamyka dzialalnosc.\n";
+    std::cout << "Kopalnia zamyka dzialalnosc." << std::endl;
 }
 
 int Mine::Mine::MineInit(char * argv [])
@@ -26,7 +28,7 @@ int Mine::Mine::MineInit(char * argv [])
     {
         if(!isdigit(argv[2][i]))
         {
-            std::cout << "Niepoprwany kwant czasu.\n";
+            std::cout << "Niepoprwany kwant czasu." << std::endl;
             return EXIT_FAILURE;
         }        
     }
@@ -37,7 +39,7 @@ int Mine::Mine::MineInit(char * argv [])
     {
         if(!isdigit(argv[2][i]))
         {
-            std::cout << "Niepoprwany typ strategii.\n";
+            std::cout << "Niepoprwany typ strategii." << std::endl;
             return EXIT_FAILURE;
         }        
     }
@@ -53,7 +55,7 @@ int Mine::Mine::MineInit(char * argv [])
         break;
 
     default:    
-        std::cout << "Niepoprwany typ strategii.\n";
+        std::cout << "Niepoprwany typ strategii." << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -62,7 +64,7 @@ int Mine::Mine::MineInit(char * argv [])
 
 int Mine::Mine::Schedule()
 {
-    std::cout << "Kopalnia wczytuje harmonogram.\n";
+    std::cout << "Kopalnia wczytuje harmonogram." << std::endl;
     std::string temp = "";
     int spacePlace = 0;
     int time = 0;
@@ -72,24 +74,24 @@ int Mine::Mine::Schedule()
     int amount = 0;
     
     do{     // przydaloby sie zrobic input validation
-        std::cout << "Kopalnia wczytuje nadjerzdzajace roboty.\n";
-        std::cout << "  Prosze podac minute, w ktorej przybyla taczka.\n";
+        std::cout << "Kopalnia wczytuje nadjerzdzajace roboty." << std::endl;
+        std::cout << "  Prosze podac minute, w ktorej przybyla taczka." << std::endl;
         std::cin >> temp;
         time = stoi(temp);
-        std::cout << "  Prosze podac ID taczki.\n";
+        std::cout << "  Prosze podac ID taczki." << std::endl;
         std::cin >> temp;
         ID = stoi(temp);
-        std::cout << "  Prosze podac zawarte w taczce kamienie.\n";
+        std::cout << "  Prosze podac zawarte w taczce kamienie." << std::endl;
         std::cin >> temp;
         game = temp;
-        std::cout << "  Prosze podac ilosc kamieni.\n";
+        std::cout << "  Prosze podac ilosc kamieni." << std::endl;
         std::cin >> temp;
         weight = stoi(temp);
-        std::cout << "  Prosze podac wage kamienia.\n";
+        std::cout << "  Prosze podac wage kamienia." << std::endl;
         std::cin >> temp;
         amount = stoi(temp);
-        std::cout << "  Prosze podac jakikolwiek znak, aby podac wiecej informacji o taczkach\n"
-                   << " lub wpisac koniec, aby zakonczyc.\n";
+        std::cout << "  Prosze podac jakikolwiek znak, aby podac wiecej informacji o taczkach." << std::endl;
+                std::cout    << " lub wpisac koniec, aby zakonczyc." << std::endl;
         std::cin >> temp;
 
         m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
@@ -116,7 +118,7 @@ int Mine::Mine::Schedule(std::string name)
     {
         while ( getline(myfile,line) )
         {
-            std::cout << "Kopalnia wczytuje nadjerzdzajace roboty.\n";
+            std::cout << "Kopalnia wczytuje nadjerzdzajace roboty." << std::endl;
             spacePlace = line.find(' ');
             time = stoi(line.substr(0,spacePlace));
             line.erase(0, spacePlace + 1);  // usun przeczytana wartosc i spacje
@@ -145,6 +147,9 @@ int Mine::Mine::Schedule(std::string name)
                                     amount));
             }
             ScheduleFCFS();
+            std::cout << "rozmiar " << m_robotsContainer.size() <<std::endl;
+             std::cout << "time to end " << m_robotsContainer[0].getTimeToEnd();
+            Report();
 
         }
 
@@ -159,35 +164,47 @@ int Mine::Mine::Schedule(std::string name)
 
 void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
 {
-    std::cout << "=====================================================\n";
-    
-    int time = -1;
-    for(Bogie::BogieContainer::iterator it = m_bogieContainer.begin(); it != m_bogieContainer.end(); it++)
-    {
-        if(time == it->getStartTime())
+    int i = 0;
+
+     for (Robot::RobotsContainer::iterator robot = m_robotsContainer.begin(); robot < m_robotsContainer.end(); robot++)
         {
-            std::cout << "oraz " << " pojawila sie taczka nr "
-            << it->getID() << " zawierajaca " << it->getAmount() << " kamieni typu " 
-            << it->getGameName() << " o wadze " << it->getWeight() << ", jej rozpakowanie potrwa "
-            << it->getDuration() << " minut.\n";
-        }else{ 
-            std::cout << "W minucie " << it->getStartTime() << " pojawila sie taczka nr "
-            << it->getID() << " zawierajaca " << it->getAmount() << " kamieni typu " 
-            << it->getGameName() << " o wadze " << it->getWeight() << ", jej rozpakowanie potrwa "
-            << it->getDuration() << " minut.\n";
+           
+            if (robot->getOutOfWorkState() == true)
+            {
+                if (i == 0)
+                {
+                    std::cout << "\t[" << std::setw(MAX_LENGTH+2) << "]";
+                }
+
+                else 
+                {
+                    std::cout << "[" << std::setw(MAX_LENGTH+2) << "]" << std::endl;
+                }
+                        
+            }
+            else
+            {
+                if (i == 0)
+                {
+                    std::cout << "\t[" << std::setw(MAX_LENGTH) << std::left << robot->getBogie()->getGameName()
+                    << std::right << robot->getTimeToEnd() << "]";
+                }
+
+                else
+                {
+                    std::cout << "[" << std::setw(MAX_LENGTH) << std::left << robot->getBogie()->getGameName()
+                    << std::right << robot->getTimeToEnd() << "]" << std::endl;
+                }
+
+            }
+            i++;
         }
-    
-        time = it->getStartTime();
-
-    }
-
-    
-    std::cout << "=====================================================\n";
+        std::cout << std::endl;
 }
 
 void Mine::Mine::ScheduleFCFS()
 {
-    std::cout << "Szereguje zadania zgodnie z FCFS\n";
+    std::cout << "Szereguje zadania zgodnie z FCFS"<< std::endl;
     int i = 0;
     for(Robot::Robot& robot : m_robotsContainer)
     {
@@ -209,6 +226,5 @@ void Mine::Mine::ScheduleFCFS()
         if(m_bogieContainer.empty())// jesli wektor jest wusty to zakoncz
             break;
     }
-
 
 }
