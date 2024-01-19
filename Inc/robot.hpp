@@ -1,6 +1,6 @@
-#include "bogie.hpp"
 #ifndef ROBOT_H
 #define ROBOT_H
+#include "bogie.hpp"
 
 namespace Robot
 {
@@ -15,12 +15,13 @@ namespace Robot
         ~Robot(){};
         int IncreaseWorkingTime();
         Bogie::Bogie* FinishJob();
-        bool StartJob(Bogie::Bogie* pBogie);
+        bool StartJob(Bogie::Bogie* const pBogie);
         Bogie::Bogie* getBogie();
-        int getTimeToEnd();
+        int const getTimeToEnd() const;
     };
 
     typedef std::vector<Robot> RobotsContainer;
+    
     
 } // namespace Robot
 #endif

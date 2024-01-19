@@ -25,7 +25,7 @@ class Mine
         int m_robotsNr;
     
     public:
-        Mine();
+        Mine(int robotsNr);
         ~Mine();
         int MineInit(char * argv []);
         int Schedule();

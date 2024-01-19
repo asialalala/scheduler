@@ -14,8 +14,18 @@ int main(int argc, char * argv [])
         return EXIT_FAILURE;
     }
 
+    for(int i = 0; i < strlen(argv[1]); i++)
+    {
+        if(!isdigit(argv[1][i]))
+        {
+            std::cout << "Niepoprwana ilosc robotow.\n";
+            return EXIT_FAILURE;
+        }        
+    }
+
+    int robotsNr = atoi(argv[1]);
     std::string fileNamePass = argv[3];
-    Mine::Mine mine;
+    Mine::Mine mine(robotsNr);
 
     if(mine.MineInit(argv) == EXIT_FAILURE)
         return EXIT_FAILURE;

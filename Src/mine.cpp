@@ -2,9 +2,15 @@
 #include <vector>
 #include <iterator>
 
-Mine::Mine::Mine()
+Mine::Mine::Mine(int robotsNr)
 {
     std::cout << "Kopalnia uruchomiona.\n";
+    m_robotsNr = robotsNr;
+    for (size_t i = 0; i < m_robotsNr; i++)
+    {
+        m_robotsContainer.push_back(Robot::Robot());
+    }
+    
 }
 
 Mine::Mine::~Mine()
@@ -15,16 +21,6 @@ Mine::Mine::~Mine()
 int Mine::Mine::MineInit(char * argv [])
 {
     // wczytanie parametrow programu
-    for(int i = 0; i < strlen(argv[1]); i++)
-    {
-        if(!isdigit(argv[1][i]))
-        {
-            std::cout << "Niepoprwana ilosc robotow.\n";
-            return EXIT_FAILURE;
-        }        
-    }
-
-    m_robotsNr = atoi(argv[1]);
 
     for(int i = 0; i < strlen(argv[2]); i++)
     {
@@ -98,7 +94,7 @@ int Mine::Mine::Schedule()
 
         m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
                             amount));
-        ScheduleFCFS();
+        // ScheduleFCFS();
     }while(temp.compare("koniec") != 0);
 
     return EXIT_SUCCESS;
@@ -185,10 +181,34 @@ void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
 
     }
 
+    
     std::cout << "=====================================================\n";
 }
 
 void Mine::Mine::ScheduleFCFS()
 {
     std::cout << "Szereguje zadania zgodnie z FCFS\n";
+    int i = 0;
+    for(Robot::Robot& robot : m_robotsContainer)
+    {
+        robot.IncreaseWorkingTime();
+    }
+
+    for(Robot::Robot& robot : m_robotsContainer)
+    {
+        robot.FinishJob();
+    }
+
+    for(Robot::Robot& robot : m_robotsContainer)
+    {
+        std::cout << i;
+        i++;
+        bool workAssigned = robot.StartJob(&m_bogieContainer.front());
+        if(workAssigned)    //jesli uda sie to zmniejsz wektor wagonikow do obsluzenia
+            m_bogieContainer.erase(m_bogieContainer.begin());
+        if(m_bogieContainer.empty())// jesli wektor jest wusty to zakoncz
+            break;
+    }
+
+
 }
