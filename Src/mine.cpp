@@ -64,7 +64,7 @@ int Mine::Mine::MineInit(char * argv [])
     return EXIT_SUCCESS;
 }
 
-int Mine::Mine::InitScheme()
+int Mine::Mine::Schedule()
 {
     std::cout << "Kopalnia wczytuje harmonogram.\n";
     std::string temp = "";
@@ -76,35 +76,36 @@ int Mine::Mine::InitScheme()
     int amount = 0;
     
     do{     // przydaloby sie zrobic input validation
-        std::cout << "Prosze podac minute, w ktorej przybyla taczka.\n";
+        std::cout << "Kopalnia wczytuje nadjerzdzajace roboty.\n";
+        std::cout << "  Prosze podac minute, w ktorej przybyla taczka.\n";
         std::cin >> temp;
         time = stoi(temp);
-        std::cout << "Prosze podac ID taczki.\n";
+        std::cout << "  Prosze podac ID taczki.\n";
         std::cin >> temp;
         ID = stoi(temp);
-        std::cout << "Prosze podac zawarte w taczce kamienie.\n";
+        std::cout << "  Prosze podac zawarte w taczce kamienie.\n";
         std::cin >> temp;
         game = temp;
-        std::cout << "Prosze podac ilosc kamieni.\n";
+        std::cout << "  Prosze podac ilosc kamieni.\n";
         std::cin >> temp;
         weight = stoi(temp);
-        std::cout << "Prosze podac wage kamienia.\n";
+        std::cout << "  Prosze podac wage kamienia.\n";
         std::cin >> temp;
         amount = stoi(temp);
-        std::cout << "Prosze podac jakikolwiek znak, aby podac wiecej informacji o taczkach\n"
-                   << "lub wpisac koniec, aby zakonczyc.\n";
+        std::cout << "  Prosze podac jakikolwiek znak, aby podac wiecej informacji o taczkach\n"
+                   << " lub wpisac koniec, aby zakonczyc.\n";
         std::cin >> temp;
 
         m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
                             amount));
+        ScheduleFCFS();
     }while(temp.compare("koniec") != 0);
 
     return EXIT_SUCCESS;
 }
 
-int Mine::Mine::InitScheme(std::string name)
+int Mine::Mine::Schedule(std::string name)
 {
-    std::cout << "Kopalnia wczytuje harmonogram.\n";
     std::string line;
     std::ifstream myfile(name);
     int spacePlace = 0;
@@ -119,6 +120,7 @@ int Mine::Mine::InitScheme(std::string name)
     {
         while ( getline(myfile,line) )
         {
+            std::cout << "Kopalnia wczytuje nadjerzdzajace roboty.\n";
             spacePlace = line.find(' ');
             time = stoi(line.substr(0,spacePlace));
             line.erase(0, spacePlace + 1);  // usun przeczytana wartosc i spacje
@@ -146,6 +148,7 @@ int Mine::Mine::InitScheme(std::string name)
                 m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
                                     amount));
             }
+            ScheduleFCFS();
 
         }
 
@@ -183,4 +186,9 @@ void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
     }
 
     std::cout << "=====================================================\n";
+}
+
+void Mine::Mine::ScheduleFCFS()
+{
+    std::cout << "Szereguje zadania zgodnie z FCFS\n";
 }

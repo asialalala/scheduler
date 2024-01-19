@@ -8,7 +8,7 @@ namespace Robot
     class Robot
     {
     private:
-        Bogie::BogieContainer m_bogieContainer; // wagoniki, ktore obsluguje robot
+        Bogie::Bogie bogie; // wagonik, ktory obsluguje robot
     public:
         Robot();
         ~Robot(){};

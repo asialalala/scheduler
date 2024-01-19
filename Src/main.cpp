@@ -22,10 +22,10 @@ int main(int argc, char * argv [])
 
     if(fileNamePass == "-")
     {
-        if(mine.InitScheme() == EXIT_FAILURE)
+        if(mine.Schedule() == EXIT_FAILURE)
         return EXIT_FAILURE;
     }else{
-        if(mine.InitScheme(fileNamePass) == EXIT_FAILURE)
+        if(mine.Schedule(fileNamePass) == EXIT_FAILURE)
         return EXIT_FAILURE;
     }
 

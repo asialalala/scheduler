@@ -28,9 +28,10 @@ class Mine
         Mine();
         ~Mine();
         int MineInit(char * argv []);
-        int InitScheme();
-        int InitScheme(std::string name);
+        int Schedule();
+        int Schedule(std::string name);
         void Report() ;
+        void ScheduleFCFS();
 };
 } // Mine namespace
 
