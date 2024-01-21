@@ -79,10 +79,8 @@ int Mine::Mine::UploadBogieContainer()
     int amount = 0;
     
     do{     // przydaloby sie zrobic input validation
+        time++;
         std::cout << "Kopalnia wczytuje nadjerzdzajace roboty." << std::endl;
-        std::cout << "  Prosze podac minute, w ktorej przybyla taczka." << std::endl;
-        std::cin >> temp;
-        time = stoi(temp);
         std::cout << "  Prosze podac ID taczki." << std::endl;
         std::cin >> temp;
         ID = stoi(temp);
@@ -99,12 +97,19 @@ int Mine::Mine::UploadBogieContainer()
                 std::cout    << " lub wpisac koniec, aby zakonczyc." << std::endl;
         std::cin >> temp;
 
-        m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
-                            amount));
+        Bogie::Bogie* newBogie = new Bogie::Bogie(time, ID, game, weight,amount);
+        m_bogieContainer.push_back(*newBogie );
+        
+        if(m_bogieContainer.size() > 0)
+        {
+            ScheduleFCFS();
+            Report(time);
+        }
+
     }while(temp.compare("koniec") != 0);
 
     
-
+    m_endOfreading = true;
     return time;
 }
 

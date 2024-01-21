@@ -38,6 +38,5 @@ int main(int argc, char * argv [])
         if(mine.Schedule(fileNamePass) == EXIT_FAILURE)
         return EXIT_FAILURE;
     }
-
     return EXIT_SUCCESS;
 }
