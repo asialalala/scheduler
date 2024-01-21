@@ -26,6 +26,7 @@ Bogie::Bogie::Bogie(   int startTime, int ID,
     if(result == 0)
         m_game = turkus;
     
+    std::cout << "  W chwili " << startTime << " dodano wozek z kamieniami " << getGameName() << " potrwa " << m_duration << std::endl;
 }
 
 std::string Bogie::Bogie::getGameName() const
@@ -33,9 +34,9 @@ std::string Bogie::Bogie::getGameName() const
     switch(m_game)
     {
         case agaty :
-            return "agat";
+            return "agaty";
         case rubiny :
-            return "rubin";
+            return "rubiny";
         case zloto :
             return "zloto";
         case turkus :

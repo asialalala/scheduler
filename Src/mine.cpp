@@ -12,6 +12,8 @@ Mine::Mine::Mine(int robotsNr)
     {
         m_robotsContainer.push_back(Robot::Robot());
     }
+    lackOfBogie = false;
+    m_bogieContainerIterator = 0;
     
 }
 
@@ -113,6 +115,7 @@ int Mine::Mine::Schedule(std::string name)
     int weight = 0;
     int amount = 0;
     int i = 0;
+    bool startTask = false;
 
     if (myfile.is_open())
     {
@@ -146,10 +149,17 @@ int Mine::Mine::Schedule(std::string name)
                 m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
                                     amount));
             }
-            ScheduleFCFS();
-            std::cout << "rozmiar " << m_robotsContainer.size() <<std::endl;
-             std::cout << "time to end " << m_robotsContainer[0].getTimeToEnd();
-            Report();
+            if(m_bogieContainer.size() > 0)
+            {
+                // if(startTask == false)
+                // {
+                //     m_bogieContainerIterator = m_bogieContainer.begin();
+                //     startTask = true;
+                // }
+
+                ScheduleFCFS();
+                Report();
+            }
 
         }
 
@@ -204,6 +214,7 @@ void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
 
 void Mine::Mine::ScheduleFCFS()
 {
+
     std::cout << "Szereguje zadania zgodnie z FCFS"<< std::endl;
     int i = 0;
     for(Robot::Robot& robot : m_robotsContainer)
@@ -216,15 +227,29 @@ void Mine::Mine::ScheduleFCFS()
         robot.FinishJob();
     }
 
+    std::cout << "Ilosc wozkow w kontenerze " << m_bogieContainer.size() << std::endl;
+    if(lackOfBogie && m_bogieContainerIterator < m_bogieContainer.size() - 1)
+        m_bogieContainerIterator++;
+    
     for(Robot::Robot& robot : m_robotsContainer)
     {
-        std::cout << i;
-        i++;
-        bool workAssigned = robot.StartJob(&m_bogieContainer.front());
-        if(workAssigned)    //jesli uda sie to zmniejsz wektor wagonikow do obsluzenia
-            m_bogieContainer.erase(m_bogieContainer.begin());
-        if(m_bogieContainer.empty())// jesli wektor jest wusty to zakoncz
-            break;
+         i++;
+        std::cout << "Probuje dodac wozek z ID:" << (m_bogieContainer[m_bogieContainerIterator]).getID() << " do robota  " << i << std::endl;
+        std::cout << "  WARTOSC ITERATORA: " << m_bogieContainerIterator << std::endl; 
+        if(robot.StartJob(&(m_bogieContainer[m_bogieContainerIterator])))    //jesli uda sie to przesunac iterator do nastepnego 
+        {
+            std::cout << "wozek przypisany do robota\n";
+            if(m_bogieContainerIterator < m_bogieContainer.size() - 1)  
+            {
+                m_bogieContainerIterator++;
+            }else{  // jesli nie ma juz wiecej wozkow
+                std::cout << "nie ma wiecej wozkow\n";
+                lackOfBogie = true;
+                break;
+            }
+        }else{
+            std::cout << "nie udalo sie dodac wozka\n";
+        }
     }
 
 }

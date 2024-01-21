@@ -5,7 +5,7 @@
 
 namespace Bogie
 {
-    enum Game {
+enum Game {
             rubiny,
             agaty,
             zloto,

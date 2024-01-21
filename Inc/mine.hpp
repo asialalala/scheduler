@@ -23,6 +23,8 @@ class Mine
         Robot::RobotsContainer m_robotsContainer;
         int m_timeQuantum;
         int m_robotsNr;
+        int m_bogieContainerIterator;
+        int lackOfBogie;
     
     public:
         Mine(int robotsNr);
