@@ -9,6 +9,8 @@
 #include "bogie.hpp"
 #include "robot.hpp"
 
+#define WRONG_FILE -1
+
 namespace Mine
 {
     enum Strategy{
@@ -29,6 +31,12 @@ class Mine
         int m_lastArrvied;
         int m_lackOfBogie;
         bool m_endOfreading;
+
+        int UploadBogieContainer();
+        int UploadBogieContainer(std::string name);
+        void Report(int time);
+        void ScheduleFCFS();
+        bool checkIfEnd();
     
     public:
         Mine(int robotsNr);
@@ -36,9 +44,7 @@ class Mine
         int MineInit(char * argv []);
         int Schedule();
         int Schedule(std::string name);
-        void Report(int time);
-        void ScheduleFCFS();
-        bool checkIfEnd();
+
 };
 } // Mine namespace
 

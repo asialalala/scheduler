@@ -67,7 +67,7 @@ int Mine::Mine::MineInit(char * argv [])
     return EXIT_SUCCESS;
 }
 
-int Mine::Mine::Schedule()
+int Mine::Mine::UploadBogieContainer()
 {
     std::cout << "Kopalnia wczytuje harmonogram." << std::endl;
     std::string temp = "";
@@ -101,15 +101,14 @@ int Mine::Mine::Schedule()
 
         m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
                             amount));
-        // ScheduleFCFS();
     }while(temp.compare("koniec") != 0);
 
     
 
-    return EXIT_SUCCESS;
+    return time;
 }
 
-int Mine::Mine::Schedule(std::string name)
+int Mine::Mine::UploadBogieContainer(std::string name)
 {
     std::string line;
     std::ifstream myfile(name);
@@ -164,17 +163,11 @@ int Mine::Mine::Schedule(std::string name)
         myfile.close();
     }else{
         std::cout << "Nie udalo sie otworzyc pliku: " << name << std::endl;
-        return EXIT_FAILURE;
+        return WRONG_FILE;
     }
     m_endOfreading = true;
-    while (!checkIfEnd())
-    {
-        time++;
-        ScheduleFCFS();
-        Report(time);
-    }
     
-    return EXIT_SUCCESS;
+    return time;
 }
 
 void Mine::Mine::Report(int time)       // tutaj przydałoby sie zrobic consta
@@ -291,4 +284,36 @@ bool Mine::Mine::checkIfEnd() {
             return false;
     }
     return true;
+}
+
+int Mine::Mine::Schedule()
+{
+    int time = UploadBogieContainer();
+    if(time == WRONG_FILE)
+    {
+        return EXIT_FAILURE;
+    }
+    while (!checkIfEnd())
+    {
+        time++;
+        ScheduleFCFS();
+        Report(time);
+    }
+    return EXIT_SUCCESS;
+}
+
+int Mine::Mine::Schedule(std::string name)
+{
+    int time =  UploadBogieContainer(name);
+    if(time == WRONG_FILE)
+    {
+        return EXIT_FAILURE;
+    }
+    while (!checkIfEnd())
+    {
+        time++;
+        ScheduleFCFS();
+        Report(time);
+    }
+    return EXIT_SUCCESS;
 }
