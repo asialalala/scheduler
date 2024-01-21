@@ -24,6 +24,8 @@ class Mine
         int m_timeQuantum;
         int m_robotsNr;
         int m_bogieContainerIterator;
+        int m_arrivingBogieIterator;
+        int m_lastArrvied;
         int lackOfBogie;
     
     public:
@@ -32,7 +34,7 @@ class Mine
         int MineInit(char * argv []);
         int Schedule();
         int Schedule(std::string name);
-        void Report();
+        void Report(int time);
         void ScheduleFCFS();
 };
 } // Mine namespace

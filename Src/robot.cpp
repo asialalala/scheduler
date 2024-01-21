@@ -15,6 +15,7 @@ int Robot::Robot::IncreaseWorkingTime()
         return m_workingTime;
     }
     //  std::cout << "Robot zwiekszyl czas pracy do " << m_workingTime + 1 << std::endl;
+    //  std::cout << "      " << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
     return ++m_workingTime;
 }
 
@@ -27,6 +28,7 @@ Bogie::Bogie* Robot::Robot::FinishJob()
     }else if(getTimeToEnd() > 0)
     {
         // std::cout << "Robot nie moze zakonczyc pracy, bo za krotko rozpakowywal wozek.\n";
+        // std::cout << "      " << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
         return nullptr;
     }
     // std::cout << "Robot konczy prace.\n";
@@ -34,20 +36,21 @@ Bogie::Bogie* Robot::Robot::FinishJob()
     temp = m_pBogie;
     m_pBogie = nullptr;
     m_outOfWorkState = true;
+    m_workingTime = 0;
     return temp;    // zwroc wskaznik na wzek, z ktorym pracowalej
 }
 
 bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie )
 {
-    // std::cout << "ID " << pBogie->getID()<< "trwanie" << pBogie->getDuration() <<std::endl;
+    std::cout << "Proba przypisania wozka o ID: " << pBogie->getID();
     if(m_pBogie != nullptr)
     {
-        // std::cout << "Robot nie moze zaczac pracy, poniewaz nie zakonczyl poprzedniej.\n";
+        std::cout << "Robot nie moze zaczac pracy, poniewaz nie zakonczyl poprzedniej z wzokiem.\n" << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
         return false;
     }
-    // std::cout << "Robot zaczyna prace\n";
     m_pBogie = pBogie;
     m_outOfWorkState = false;
+    std::cout << "Robot zaczyna prace  z " << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
     return true;
 }
 

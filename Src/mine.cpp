@@ -14,6 +14,8 @@ Mine::Mine::Mine(int robotsNr)
     }
     lackOfBogie = false;
     m_bogieContainerIterator = 0;
+    m_arrivingBogieIterator = 0;
+    m_lastArrvied = -1;
     
 }
 
@@ -146,8 +148,8 @@ int Mine::Mine::Schedule(std::string name)
 
                 spacePlace = line.find(' ');     
 
-                m_bogieContainer.push_back( Bogie::Bogie(time, ID, game, weight,
-                                    amount));
+                Bogie::Bogie* newBogie = new Bogie::Bogie(time, ID, game, weight,amount);
+                m_bogieContainer.push_back(*newBogie );
             }
             if(m_bogieContainer.size() > 0)
             {
@@ -157,10 +159,12 @@ int Mine::Mine::Schedule(std::string name)
                 //     startTask = true;
                 // }
 
-                ScheduleFCFS();
-                Report();
-            }
+                // if( m_robotsContainer[0].getBogie() != nullptr)
+                    // std::cout << "!!!!!!!!!!!! Robot pierwszy:" << m_robotsContainer[0].getBogie()->getID();
 
+                ScheduleFCFS();
+                Report(time);
+            }
         }
 
         myfile.close();
@@ -172,11 +176,30 @@ int Mine::Mine::Schedule(std::string name)
     return EXIT_SUCCESS;
 }
 
-void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
+void Mine::Mine::Report(int time)       // tutaj przydałoby sie zrobic consta
 {
     int i = 0;
 
-     for (Robot::RobotsContainer::iterator robot = m_robotsContainer.begin(); robot < m_robotsContainer.end(); robot++)
+    std::cout << "Moment " << time <<  std::endl;
+    std::cout << m_lastArrvied << " " << m_arrivingBogieIterator << std::endl;
+    if(m_lastArrvied != m_arrivingBogieIterator)
+    {
+        for (; m_arrivingBogieIterator < m_bogieContainer.size(); m_arrivingBogieIterator++)
+        {
+            std::cout << "      wheelbarrow arrived <" << std::setw(MAX_LENGTH) 
+                        << std::left << m_bogieContainer[m_arrivingBogieIterator].getID() << " " 
+                        << m_bogieContainer[m_arrivingBogieIterator].getGameName() << " "
+                        << m_bogieContainer[m_arrivingBogieIterator].getWeight() << " "
+                        << m_bogieContainer[m_arrivingBogieIterator].getAmount() << " "
+                        << "[" << m_bogieContainer[m_arrivingBogieIterator].getDuration() << "]" 
+                        << std::right << ">" << std::endl;
+            m_lastArrvied = m_arrivingBogieIterator;
+        }
+        
+    }
+    
+
+     for (Robot::RobotsContainer::iterator robot = m_robotsContainer.begin(); robot != m_robotsContainer.end(); robot++)
         {
            
             if (robot->getOutOfWorkState() == true)
@@ -199,7 +222,6 @@ void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
                     std::cout << "\t[" << std::setw(MAX_LENGTH) << std::left << robot->getBogie()->getGameName()
                     << std::right << robot->getTimeToEnd() << "]";
                 }
-
                 else
                 {
                     std::cout << "[" << std::setw(MAX_LENGTH) << std::left << robot->getBogie()->getGameName()
@@ -214,42 +236,54 @@ void Mine::Mine::Report()       // tutaj przydałoby sie zrobic consta
 
 void Mine::Mine::ScheduleFCFS()
 {
-
+    // std::cout << "!!!!!!!!!!!! PierwszyID:" << (m_bogieContainer[0]).getID();
+    // if( m_robotsContainer[0].getBogie() != nullptr)
+        // std::cout << "!!!!!!!!!!!! Robot pierwszy:" << m_robotsContainer[0].getBogie()->getID();
     std::cout << "Szereguje zadania zgodnie z FCFS"<< std::endl;
     int i = 0;
     for(Robot::Robot& robot : m_robotsContainer)
     {
         robot.IncreaseWorkingTime();
     }
-
+    // std::cout << "!!!!!!!!!!!! PierwszyID:" << (m_bogieContainer[0]).getID();
+    // if( m_robotsContainer[0].getBogie() != nullptr)
+        // std::cout << "!!!!!!!!!!!! Robot pierwszy:" << m_robotsContainer[0].getBogie()->getID();
     for(Robot::Robot& robot : m_robotsContainer)
     {
         robot.FinishJob();
     }
-
-    std::cout << "Ilosc wozkow w kontenerze " << m_bogieContainer.size() << std::endl;
+    // std::cout << "!!!!!!!!!!!! PierwszyID:" << (m_bogieContainer[0]).getID();
+    // if( m_robotsContainer[0].getBogie() != nullptr)
+        // std::cout << "!!!!!!!!!!!! Robot pierwszy:" << m_robotsContainer[0].getBogie()->getID();
+    // std::cout << "Ilosc wozkow w kontenerze " << m_bogieContainer.size() << std::endl;
     if(lackOfBogie && m_bogieContainerIterator < m_bogieContainer.size() - 1)
         m_bogieContainerIterator++;
     
+    lackOfBogie = false;
     for(Robot::Robot& robot : m_robotsContainer)
     {
-         i++;
-        std::cout << "Probuje dodac wozek z ID:" << (m_bogieContainer[m_bogieContainerIterator]).getID() << " do robota  " << i << std::endl;
-        std::cout << "  WARTOSC ITERATORA: " << m_bogieContainerIterator << std::endl; 
+        i++;
+        // std::cout << "Probuje dodac wozek z ID:" << (m_bogieContainer[m_bogieContainerIterator]).getID() << " do robota  " << i << std::endl;
+        // std::cout << "  WARTOSC ITERATORA: " << m_bogieContainerIterator << std::endl; 
         if(robot.StartJob(&(m_bogieContainer[m_bogieContainerIterator])))    //jesli uda sie to przesunac iterator do nastepnego 
         {
-            std::cout << "wozek przypisany do robota\n";
+            // std::cout << "wozek " << (m_bogieContainer[m_bogieContainerIterator]).getID() << "przypisany do robota " << i << std::endl;
             if(m_bogieContainerIterator < m_bogieContainer.size() - 1)  
             {
                 m_bogieContainerIterator++;
             }else{  // jesli nie ma juz wiecej wozkow
-                std::cout << "nie ma wiecej wozkow\n";
+                // std::cout << "nie ma wiecej wozkow\n";
                 lackOfBogie = true;
                 break;
             }
+            // std::cout << "!!!!!!!!!!!! PierwszyID:" << (m_bogieContainer[0]).getID();
+            // if( m_robotsContainer[0].getBogie() != nullptr)
+                // std::cout << "!!!!!!!!!!!! Robot pierwszy:" << m_robotsContainer[0].getBogie()->getID();
         }else{
-            std::cout << "nie udalo sie dodac wozka\n";
+            // std::cout << "nie udalo sie dodac wozka\n";
         }
     }
-
+    // std::cout << "!!!!!!!!!!!! PierwszyID:" << (m_bogieContainer[0]).getID();
+    // if( m_robotsContainer[0].getBogie() != nullptr)
+    //     std::cout << "!!!!!!!!!!!! Robot pierwszy:" << m_robotsContainer[0].getBogie()->getID();
 }
