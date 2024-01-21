@@ -12,10 +12,11 @@ Mine::Mine::Mine(int robotsNr)
     {
         m_robotsContainer.push_back(Robot::Robot());
     }
-    lackOfBogie = false;
+    m_lackOfBogie = false;
     m_bogieContainerIterator = 0;
     m_arrivingBogieIterator = 0;
     m_lastArrvied = -1;
+    m_endOfreading = false;
     
 }
 
@@ -103,6 +104,8 @@ int Mine::Mine::Schedule()
         // ScheduleFCFS();
     }while(temp.compare("koniec") != 0);
 
+    
+
     return EXIT_SUCCESS;
 }
 
@@ -123,7 +126,7 @@ int Mine::Mine::Schedule(std::string name)
     {
         while ( getline(myfile,line) )
         {
-            std::cout << "Kopalnia wczytuje nadjerzdzajace roboty." << std::endl;
+            // std::cout << "Kopalnia wczytuje nadjerzdzajace roboty." << std::endl;
             spacePlace = line.find(' ');
             time = stoi(line.substr(0,spacePlace));
             line.erase(0, spacePlace + 1);  // usun przeczytana wartosc i spacje
@@ -150,10 +153,9 @@ int Mine::Mine::Schedule(std::string name)
 
                 Bogie::Bogie* newBogie = new Bogie::Bogie(time, ID, game, weight,amount);
                 m_bogieContainer.push_back(*newBogie );
-                            }
+            }
             if(m_bogieContainer.size() > 0)
             {
-
                 ScheduleFCFS();
                 Report(time);
             }
@@ -163,6 +165,13 @@ int Mine::Mine::Schedule(std::string name)
     }else{
         std::cout << "Nie udalo sie otworzyc pliku: " << name << std::endl;
         return EXIT_FAILURE;
+    }
+    m_endOfreading = true;
+    while (!checkIfEnd())
+    {
+        time++;
+        ScheduleFCFS();
+        Report(time);
     }
     
     return EXIT_SUCCESS;
@@ -227,35 +236,59 @@ void Mine::Mine::Report(int time)       // tutaj przydałoby sie zrobic consta
 
 void Mine::Mine::ScheduleFCFS()
 {       
-    std::cout << "Szereguje zadania zgodnie z FCFS"<< std::endl;
+    // std::cout << "Szereguje zadania zgodnie z FCFS"<< std::endl;
     int i = 0;
+
+    // for(Bogie::Bogie& bogie : m_bogieContainer)
+    // {
+    //     std::cout << bogie.getID() << " " << bogie.getDuration() << std::endl;
+    // }
+
     for(Robot::Robot& robot : m_robotsContainer)
     {
         robot.IncreaseWorkingTime();
     }
 
+    int bogieIdToUpdate = NONE_BOGIE;
     for(Robot::Robot& robot : m_robotsContainer)
     {
-        robot.FinishJob();
+        int timeOfWork = robot.getTimeToEnd();
+        bogieIdToUpdate =  robot.FinishJob();
+        if(bogieIdToUpdate != NONE_BOGIE)
+            m_bogieContainer[bogieIdToUpdate].setDuration(timeOfWork);
     }
 
-    if(lackOfBogie && m_bogieContainerIterator < m_bogieContainer.size() - 1)
+    if(!m_lackOfBogie || !m_endOfreading)
+    {
+        if(m_lackOfBogie && m_bogieContainerIterator < m_bogieContainer.size() - 1)
         m_bogieContainerIterator++;
     
-    lackOfBogie = false;
-    for(Robot::Robot& robot : m_robotsContainer)
-    {
-        if(robot.StartJob(&(m_bogieContainer[m_bogieContainerIterator])))    //jesli uda sie to przesunac iterator do nastepnego 
+        m_lackOfBogie = false;
+
+        for(Robot::Robot& robot : m_robotsContainer)
         {
-            if(m_bogieContainerIterator < m_bogieContainer.size() - 1)  
+            if(robot.StartJob(&(m_bogieContainer[m_bogieContainerIterator]), m_bogieContainerIterator))    //jesli uda sie to przesunac iterator do nastepnego 
             {
-                m_bogieContainerIterator++;
-            }else{  // jesli nie ma juz wiecej wozkow
-                lackOfBogie = true;
-                break;
-            }
-        }else{
+                if(m_bogieContainerIterator < m_bogieContainer.size() - 1)  
+                {
+                    m_bogieContainerIterator++;
+                }else{  // jesli nie ma juz wiecej wozkow
+                    m_lackOfBogie = true;
+                    break;
+                }
+            }else{
             // std::cout << "nie udalo sie dodac wozka\n";
+            }
         }
     }
+    
+}
+
+bool Mine::Mine::checkIfEnd() {
+    for(Robot::Robot& robot : m_robotsContainer)
+    {
+        if(robot.getTimeToEnd() > 0)
+            return false;
+    }
+    return true;
 }

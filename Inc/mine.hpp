@@ -15,6 +15,7 @@ namespace Mine
         RR,
         FCFS
     };
+
 class Mine
 {
     private:
@@ -26,7 +27,8 @@ class Mine
         int m_bogieContainerIterator;
         int m_arrivingBogieIterator;
         int m_lastArrvied;
-        int lackOfBogie;
+        int m_lackOfBogie;
+        bool m_endOfreading;
     
     public:
         Mine(int robotsNr);
@@ -36,6 +38,7 @@ class Mine
         int Schedule(std::string name);
         void Report(int time);
         void ScheduleFCFS();
+        bool checkIfEnd();
 };
 } // Mine namespace
 

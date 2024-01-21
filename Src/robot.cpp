@@ -5,6 +5,7 @@ Robot::Robot::Robot()
     m_pBogie = nullptr;
     m_workingTime = 0;
     m_outOfWorkState = true;
+    m_bogieIdInBogiesContainer = NONE_BOGIE;
 }
 
 int Robot::Robot::IncreaseWorkingTime()
@@ -19,33 +20,33 @@ int Robot::Robot::IncreaseWorkingTime()
     return ++m_workingTime;
 }
 
-Bogie::Bogie* Robot::Robot::FinishJob()
+int Robot::Robot::FinishJob()
 {
     if(m_pBogie == nullptr)
     {
         // std::cout << "Robot nie moze zakonczyc pracy, bo i tak nad niczym nie pracuje\n";
-        return nullptr;
+        return -1;
     }else if(getTimeToEnd() > 0)
     {
         // std::cout << "Robot nie moze zakonczyc pracy, bo za krotko rozpakowywal wozek.\n";
         // std::cout << "      " << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
-        return nullptr;
+        return -1;
     }
     // std::cout << "Robot konczy prace.\n";
-    Bogie::Bogie* temp;
-    temp = m_pBogie;
+    int temp = m_bogieIdInBogiesContainer;
+    m_bogieIdInBogiesContainer = NONE_BOGIE;
     m_pBogie = nullptr;
     m_outOfWorkState = true;
     m_workingTime = 0;
-    return temp;    // zwroc wskaznik na wzek, z ktorym pracowalej
+    return temp;    // zwroc numer wozka w kontenerze
 }
 
-bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie )
+bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie, int idInContainer )
 {
-    std::cout << "Proba przypisania wozka o ID: " << pBogie->getID();
+    // std::cout << "Proba przypisania wozka o ID: " << pBogie->getID();
     if(m_pBogie != nullptr)
     {
-        std::cout << "Robot nie moze zaczac pracy, poniewaz nie zakonczyl poprzedniej z wzokiem.\n" << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
+        // std::cout << "Robot nie moze zaczac pracy, poniewaz nie zakonczyl poprzedniej z wzokiem.\n" << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
         return false;
     }
     
@@ -53,7 +54,8 @@ bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie )
                              pBogie->getGameName(), pBogie->getWeight(), pBogie->getAmount());
     m_pBogie = newBogie;
     m_outOfWorkState = false;
-    std::cout << "Robot zaczyna prace  z " << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
+    m_bogieIdInBogiesContainer = idInContainer;
+    // std::cout << "Robot zaczyna prace  z " << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
     return true;
 }
 

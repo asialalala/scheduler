@@ -9,8 +9,22 @@ enum Game {
             rubiny,
             agaty,
             zloto,
-            turkus
+            turkus,
+            gold,
+            rubins,
+            coconuts,
+            turquoise,
+            aventurines,
+            beryls,
+            sapphires,
+            emeralds,
+            opals,
+            amethysts,
+            topazes,
+            pearls,
+            aquamarines
         };
+
 
     class Bogie
     {
