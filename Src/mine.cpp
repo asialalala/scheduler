@@ -61,6 +61,7 @@ int Mine::Mine::MineInit(char * argv [])
         return EXIT_FAILURE;
     }
 
+    std::cout << "Kopalnia uruchomiona z kwantem: " << m_quantum; 
     return EXIT_SUCCESS;
 }
 
@@ -378,21 +379,31 @@ void Mine::Mine::ScheduleRR()
     // zakoncz dziaalnie tych robotow, ktore moge
     if(m_RRtime == m_quantum)
     {
-        std::cout << "czyszcze wszytskie roboty\n";
+        std::cout << "wyczysc wszytskie roboty\n";
         // zakoncz dzaialnie wszystkich robotow                         musis jakos zliczac to od ktorego zaczac dodawac prace
         for(Robot::Robot& robot : m_robotsContainer)
         {
             int timeOfWork = robot.getTimeToEnd();
             bogieIdToUpdate =  robot.FinishJobForced();
             if(bogieIdToUpdate != NONE_BOGIE)
+            {
                 m_bogieContainer[bogieIdToUpdate].setDuration(timeOfWork);
+                m_bogieContainer[m_bogieContainerIterator].freeServed();
+            }
         }
 
     }else{
         std::cout << "sprawdzam, czy ktorys moze zakonczyc prce\n";
         for(Robot::Robot& robot : m_robotsContainer)
         {
-            robot.FinishJob();
+            int timeOfWork = robot.getTimeToEnd();
+            bogieIdToUpdate =  robot.FinishJob();
+            if(bogieIdToUpdate != NONE_BOGIE)
+            {
+                m_bogieContainer[bogieIdToUpdate].setDuration(timeOfWork);
+                m_bogieContainer[m_bogieContainerIterator].freeServed();
+            }
+                
         }
     }
 
@@ -404,13 +415,15 @@ void Mine::Mine::ScheduleRR()
             m_bogieContainerIterator = 0;
         for(Robot::Robot& robot : m_robotsContainer)
         {
-            while(m_bogieContainer[m_bogieContainerIterator].getDuration() <= 0 && m_bogieContainerIterator < (m_bogieContainer.size() - 1))
+            while((m_bogieContainer[m_bogieContainerIterator].getDuration() <= 0  || m_bogieContainer[m_bogieContainerIterator].getServedInfo() ) && m_bogieContainerIterator < (m_bogieContainer.size() - 1) )
             {
+                std::cout << "zwiekszam m_bogieContainerIterator\n ";
                 m_bogieContainerIterator++;
             }
 
             if(robot.StartJob(&(m_bogieContainer[m_bogieContainerIterator]), m_bogieContainerIterator))    //jesli uda sie to przesunac iterator do nastepnego 
             {
+                m_bogieContainer[m_bogieContainerIterator].setServed();
                 if(m_bogieContainerIterator < m_bogieContainer.size() - 1)  
                 {
                     m_bogieContainerIterator++;

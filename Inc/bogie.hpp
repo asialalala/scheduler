@@ -35,6 +35,7 @@ enum Game {
             int m_weight;
             int m_amount;
             int m_duration;
+            bool m_served;
 
         public:
             Bogie(  int startTime, int ID,
@@ -56,6 +57,10 @@ enum Game {
             int getWeight() const {return m_weight;};
             int getAmount() const {return m_amount ;};
             int getDuration() const {return m_duration;};
+            void setServed(){m_served = true;};
+            bool getServedInfo() const {return m_served;};
+            void freeServed(){m_served = false;};
+
 
     };
 
