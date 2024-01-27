@@ -22,6 +22,7 @@ namespace Robot
         Bogie::Bogie* getBogie();
         int const getTimeToEnd() const;
         bool getOutOfWorkState();
+        int FinishJobForced();
         
         
     };

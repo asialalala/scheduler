@@ -31,15 +31,18 @@ class Mine
         int m_lastArrvied;
         int m_lackOfBogie;
         bool m_endOfreading;
+        int m_quantum;
+        int m_RRtime;
 
         int UploadBogieContainer();
         int UploadBogieContainer(std::string name);
         void Report(int time);
         void ScheduleFCFS();
+        void ScheduleRR();
         bool checkIfEnd();
     
     public:
-        Mine(int robotsNr);
+        Mine(int robotsNr, int quantum);
         ~Mine();
         int MineInit(char * argv []);
         int Schedule();

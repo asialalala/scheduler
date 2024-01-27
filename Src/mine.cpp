@@ -4,20 +4,16 @@
 
 #define MAX_LENGTH 15 // czy tutaj?
 
-Mine::Mine::Mine(int robotsNr)
+Mine::Mine::Mine(int robotsNr, int quantum) : m_quantum(0), m_RRtime(0), m_lackOfBogie(false), m_bogieContainerIterator(0),
+                                            m_arrivingBogieIterator(0), m_lastArrvied(-1), m_endOfreading(false)
 {
-    std::cout << "Kopalnia uruchomiona." << std::endl;
+    
     m_robotsNr = robotsNr;
     for (size_t i = 0; i < m_robotsNr; i++)
     {
         m_robotsContainer.push_back(Robot::Robot());
     }
-    m_lackOfBogie = false;
-    m_bogieContainerIterator = 0;
-    m_arrivingBogieIterator = 0;
-    m_lastArrvied = -1;
-    m_endOfreading = false;
-    
+    std::cout << "Kopalnia uruchomiona." << std::endl;
 }
 
 Mine::Mine::~Mine()
@@ -29,6 +25,7 @@ int Mine::Mine::MineInit(char * argv [])
 {
     // wczytanie parametrow programu
 
+    std::cout << "Kopalnia organizuje sie do pracy." << std::endl;
     for(int i = 0; i < strlen(argv[2]); i++)
     {
         if(!isdigit(argv[2][i]))
@@ -38,16 +35,16 @@ int Mine::Mine::MineInit(char * argv [])
         }        
     }
 
-    m_timeQuantum = atoi(argv[2]);
-
-    for(int i = 0; i < strlen(argv[2]); i++)
+    for(int i = 0; i < strlen(argv[4]); i++)
     {
-        if(!isdigit(argv[2][i]))
+        if(!isdigit(argv[4][i]))
         {
             std::cout << "Niepoprwany typ strategii." << std::endl;
             return EXIT_FAILURE;
         }        
     }
+
+    m_quantum = atoi(argv[2]);
 
     switch (atoi(argv[4]))
     {
@@ -102,7 +99,21 @@ int Mine::Mine::UploadBogieContainer()
         
         if(m_bogieContainer.size() > 0)
         {
-            ScheduleFCFS();
+            switch (m_strategyName)
+            {
+                case FCFS:
+                    ScheduleFCFS();
+                    break;
+
+                case RR:
+                    ScheduleRR();
+                    break;
+
+                default:
+                    std::cout << "Niepoprawna strategia szeregowania.\n";
+                    break;
+            }
+
             Report(time);
         }
 
@@ -160,7 +171,20 @@ int Mine::Mine::UploadBogieContainer(std::string name)
             }
             if(m_bogieContainer.size() > 0)
             {
-                ScheduleFCFS();
+                switch (m_strategyName)
+                {
+                    case FCFS:
+                        ScheduleFCFS();
+                        break;
+
+                    case RR:
+                        ScheduleRR();
+                        break;
+
+                    default:
+                        std::cout << "Niepoprawna strategia szeregowania.\n";
+                        break;
+                }
                 Report(time);
             }
         }
@@ -209,7 +233,7 @@ void Mine::Mine::Report(int time)       // tutaj przydałoby sie zrobic consta
 
                 else 
                 {
-                    std::cout << "[" << std::setw(MAX_LENGTH+2) << "]" << std::endl;
+                    std::cout << "[" << std::setw(MAX_LENGTH+2) << "]" ;
                 }
                         
             }
@@ -223,7 +247,7 @@ void Mine::Mine::Report(int time)       // tutaj przydałoby sie zrobic consta
                 else
                 {
                     std::cout << "[" << std::setw(MAX_LENGTH) << std::left << robot->getBogie()->getGameName()
-                    << std::right << robot->getTimeToEnd() << "]" << std::endl;
+                    << std::right << robot->getTimeToEnd() << "]" ;
                 }
 
             }
@@ -234,13 +258,8 @@ void Mine::Mine::Report(int time)       // tutaj przydałoby sie zrobic consta
 
 void Mine::Mine::ScheduleFCFS()
 {       
-    // std::cout << "Szereguje zadania zgodnie z FCFS"<< std::endl;
+     std::cout << "Szeregowanie FCFS." << std::endl;
     int i = 0;
-
-    // for(Bogie::Bogie& bogie : m_bogieContainer)
-    // {
-    //     std::cout << bogie.getID() << " " << bogie.getDuration() << std::endl;
-    // }
 
     for(Robot::Robot& robot : m_robotsContainer)
     {
@@ -301,7 +320,18 @@ int Mine::Mine::Schedule()
     while (!checkIfEnd())
     {
         time++;
-        ScheduleFCFS();
+        switch (m_strategyName)
+        {
+            case FCFS:
+                ScheduleFCFS();
+                break;
+            case RR:
+                ScheduleRR();
+                break;
+            default:
+                std::cout << "Niepoprawna strategia szeregowania.\n";
+                break;
+        }
         Report(time);
     }
     return EXIT_SUCCESS;
@@ -317,8 +347,83 @@ int Mine::Mine::Schedule(std::string name)
     while (!checkIfEnd())
     {
         time++;
-        ScheduleFCFS();
+        switch (m_strategyName)
+        {
+            case FCFS:
+                ScheduleFCFS();
+                break;
+            case RR:
+                ScheduleRR();
+                break;
+            default:
+                std::cout << "Niepoprawna strategia szeregowania.\n";
+                break;
+        }
         Report(time);
     }
     return EXIT_SUCCESS;
+}
+
+void Mine::Mine::ScheduleRR()
+{
+    std::cout << "Szeregowanie RR." << std::endl;
+    m_RRtime++;
+
+    for(Robot::Robot& robot : m_robotsContainer)
+    {
+        robot.IncreaseWorkingTime();
+    }
+
+    int bogieIdToUpdate = NONE_BOGIE;
+    // zakoncz dziaalnie tych robotow, ktore moge
+    if(m_RRtime == m_quantum)
+    {
+        std::cout << "czyszcze wszytskie roboty\n";
+        // zakoncz dzaialnie wszystkich robotow                         musis jakos zliczac to od ktorego zaczac dodawac prace
+        for(Robot::Robot& robot : m_robotsContainer)
+        {
+            int timeOfWork = robot.getTimeToEnd();
+            bogieIdToUpdate =  robot.FinishJobForced();
+            if(bogieIdToUpdate != NONE_BOGIE)
+                m_bogieContainer[bogieIdToUpdate].setDuration(timeOfWork);
+        }
+
+    }else{
+        std::cout << "sprawdzam, czy ktorys moze zakonczyc prce\n";
+        for(Robot::Robot& robot : m_robotsContainer)
+        {
+            robot.FinishJob();
+        }
+    }
+
+
+    
+     if(!m_lackOfBogie || !m_endOfreading)
+    {
+        if(m_lackOfBogie)
+            m_bogieContainerIterator = 0;
+        for(Robot::Robot& robot : m_robotsContainer)
+        {
+            while(m_bogieContainer[m_bogieContainerIterator].getDuration() <= 0 && m_bogieContainerIterator < (m_bogieContainer.size() - 1))
+            {
+                m_bogieContainerIterator++;
+            }
+
+            if(robot.StartJob(&(m_bogieContainer[m_bogieContainerIterator]), m_bogieContainerIterator))    //jesli uda sie to przesunac iterator do nastepnego 
+            {
+                if(m_bogieContainerIterator < m_bogieContainer.size() - 1)  
+                {
+                    m_bogieContainerIterator++;
+                }else{  // jesli nie ma juz wiecej wozkow
+                    m_lackOfBogie = true;
+                    break;
+                }
+            }else{
+            std::cout << "nie udalo sie dodac wozka\n";
+            }
+        }
+    }
+
+    
+
 }

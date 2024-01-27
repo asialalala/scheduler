@@ -24,8 +24,9 @@ int main(int argc, char * argv [])
     }
 
     int robotsNr = atoi(argv[1]);
+    int quant = atoi(argv[2]);
     std::string fileNamePass = argv[3];
-    Mine::Mine mine(robotsNr);
+    Mine::Mine mine(robotsNr, quant);
 
     if(mine.MineInit(argv) == EXIT_FAILURE)
         return EXIT_FAILURE;

@@ -41,6 +41,23 @@ int Robot::Robot::FinishJob()
     return temp;    // zwroc numer wozka w kontenerze
 }
 
+int Robot::Robot::FinishJobForced()
+{
+    if(m_pBogie == nullptr)
+    {
+        // std::cout << "Robot nie moze zakonczyc pracy, bo i tak nad niczym nie pracuje\n";
+        return -1;
+    }
+    std::cout << "Robot konczy prace.\n";
+    int temp = m_bogieIdInBogiesContainer;
+    m_bogieIdInBogiesContainer = NONE_BOGIE;
+    m_pBogie = nullptr;
+    m_outOfWorkState = true;
+    m_workingTime = 0;
+    return temp;    // zwroc numer wozka w kontenerze
+}
+
+
 bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie, int idInContainer )
 {
     // std::cout << "Proba przypisania wozka o ID: " << pBogie->getID();
