@@ -14,7 +14,7 @@ Mine::Mine::Mine(int robotsNr, int quantum) : m_quantum(0), m_RRtime(0), m_lackO
         m_robotsContainer.push_back(Robot::Robot());
     }
     std::cout << "Kopalnia uruchomiona." << std::endl;
-    nr = 0;
+    m_added = false;
 }
 
 Mine::Mine::~Mine()
@@ -26,7 +26,7 @@ int Mine::Mine::MineInit(char * argv [])
 {
     // wczytanie parametrow programu
 
-    std::cout << "Kopalnia organizuje sie do pracy." << std::endl;
+    // std::cout << "Kopalnia organizuje sie do pracy." << std::endl;
     for(int i = 0; i < strlen(argv[2]); i++)
     {
         if(!isdigit(argv[2][i]))
@@ -62,13 +62,13 @@ int Mine::Mine::MineInit(char * argv [])
         return EXIT_FAILURE;
     }
 
-    std::cout << "Kopalnia uruchomiona z kwantem: " << m_quantum; 
+    // std::cout << "Kopalnia uruchomiona z kwantem: " << m_quantum; 
     return EXIT_SUCCESS;
 }
 
 int Mine::Mine::UploadBogieContainer()
 {
-    std::cout << "Kopalnia wczytuje harmonogram." << std::endl;
+    // std::cout << "Kopalnia wczytuje harmonogram." << std::endl;
     std::string temp = "";
     int spacePlace = 0;
     int time = 0;
@@ -260,7 +260,7 @@ void Mine::Mine::Report(int time)       // tutaj przydałoby sie zrobic consta
 
 void Mine::Mine::ScheduleFCFS()
 {       
-     std::cout << "Szeregowanie FCFS." << std::endl;
+    //  std::cout << "Szeregowanie FCFS." << std::endl;
     int i = 0;
 
     for(Robot::Robot& robot : m_robotsContainer)
@@ -308,11 +308,11 @@ bool Mine::Mine::checkIfEnd() {
     {
         if(robot.getTimeToEnd() > 0)
         {
-            std::cout << "kontynuuj prace.\n";
+            // std::cout << "kontynuuj prace.\n";
             return false;
         }
     }
-    std::cout << "Wszystkie skonczyly.\n";
+    // std::cout << "Wszystkie skonczyly.\n";
     return true;
 }
 
@@ -372,11 +372,6 @@ int Mine::Mine::Schedule(std::string name)
 
 void Mine::Mine::ScheduleRR()
 {
-    for(Bogie::Bogie& bogie : m_bogieContainer)
-    {
-        std::cout << bogie.getGameName() << " " << bogie.getDuration() << std::endl; 
-    }
-    std::cout << "Szeregowanie RR." << std::endl;
 
     for(Robot::Robot& robot : m_robotsContainer)
     {
@@ -396,14 +391,14 @@ void Mine::Mine::ScheduleRR()
             if(bogieIdToUpdate != NONE_BOGIE)
             {
                 m_bogieContainer[bogieIdToUpdate].setDuration(timeOfWork);
-                std::cout << "  Czas do zakonczenia po minieciu kwantu: " <<  m_bogieContainer[bogieIdToUpdate].getDuration() <<std::endl;
+                // std::cout << "  Czas do zakonczenia po minieciu kwantu: " <<  m_bogieContainer[bogieIdToUpdate].getDuration() <<std::endl;
                 m_bogieContainer[bogieIdToUpdate].freeServed();
             }
         }
         m_RRtime = 0;
 
     }else{
-        std::cout << "sprawdzam, czy ktorys moze zakonczyc prce\n";
+        // std::cout << "sprawdzam, czy ktorys moze zakonczyc prce\n";
         for(Robot::Robot& robot : m_robotsContainer)
         {
             int timeOfWork = robot.getTimeToEnd();
@@ -422,17 +417,19 @@ void Mine::Mine::ScheduleRR()
     {
         m_lackOfBogie = false;
 
-        m_bogieContainerIterator = ++m_bogieContainerIterator % (m_bogieContainer.size());
-        std::cout << "1. zmieniam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
+        if(m_added)
+            m_bogieContainerIterator = ++m_bogieContainerIterator % (m_bogieContainer.size());
+        
+        m_added = false;
+        // std::cout << "PRZED. zmieniam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
         int startShercingID = m_bogieContainerIterator;
         for(Robot::Robot& robot : m_robotsContainer)
         {
             while((m_bogieContainer[m_bogieContainerIterator].getDuration() <= 0  || m_bogieContainer[m_bogieContainerIterator].getServedInfo() ) && !m_lackOfBogie)
             {
-                std::cout <<  m_bogieContainerIterator << " +1 % " << (m_bogieContainer.size()) << std::endl;
                 m_bogieContainerIterator = ++m_bogieContainerIterator % (m_bogieContainer.size());
-                std::cout << "1. zmieniam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
-                std::cout << "startShercingID: " << startShercingID << std::endl;
+                // std::cout << "1. zmieniam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
+                // std::cout << "startShercingID: " << startShercingID << std::endl;
                 if(m_bogieContainerIterator == startShercingID)
                 {
                     m_lackOfBogie = true;
@@ -441,28 +438,27 @@ void Mine::Mine::ScheduleRR()
 
             if(!m_lackOfBogie)
             {
-                std::cout << "  podczas zaczecia pracy " << m_bogieContainer[m_bogieContainerIterator].getGameName() << m_bogieContainer[m_bogieContainerIterator].getDuration() <<std::endl;
+                // std::cout << "  podczas zaczecia pracy " << m_bogieContainer[m_bogieContainerIterator].getGameName() << m_bogieContainer[m_bogieContainerIterator].getDuration() <<std::endl;
                 if(robot.StartJob(&(m_bogieContainer[m_bogieContainerIterator]), m_bogieContainerIterator))    //jesli uda sie to przesunac iterator do nastepnego 
                 {
-                    std::cout << "dodano id " << m_bogieContainerIterator << std::endl;
+                    // std::cout << "dodano id " << m_bogieContainerIterator << std::endl;
+                    m_added = true;
                     m_bogieContainer[m_bogieContainerIterator].setServed();
 
                     if(m_bogieContainerIterator < (m_bogieContainer.size() - 1))
                     {
-                        m_bogieContainerIterator++;
-                        std::cout << "2. zmieniam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
+                        // std::cout << "2. zmieniam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
                     }else{
-                        std::cout << "2. pozostawiam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
+                        // std::cout << "2. pozostawiam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
                     }
 
-                    std::cout << "udalo sie dodac wozek\n";
+                    // std::cout << "udalo sie dodac wozek\n";
                 }else{
-                std::cout << "nie udalo sie dodac wozka\n";
+                // std::cout << "nie udalo sie dodac wozka\n";
                 }
             }
         }   
     }
-    nr++;
     m_RRtime++;
 
 }

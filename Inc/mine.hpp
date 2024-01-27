@@ -40,7 +40,7 @@ class Mine
         void ScheduleFCFS();
         void ScheduleRR();
         bool checkIfEnd();
-        int nr;
+        bool m_added;
     
     public:
         Mine(int robotsNr, int quantum);

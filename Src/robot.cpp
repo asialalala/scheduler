@@ -48,7 +48,7 @@ int Robot::Robot::FinishJobForced()
         // std::cout << "Robot nie moze zakonczyc pracy, bo i tak nad niczym nie pracuje\n";
         return -1;
     }
-    std::cout << "Robot konczy prace.\n";
+    // std::cout << "Robot konczy prace.\n";
     int temp = m_bogieIdInBogiesContainer;
     m_bogieIdInBogiesContainer = NONE_BOGIE;
     m_pBogie = nullptr;
@@ -71,7 +71,7 @@ bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie, int idInContainer )
     m_pBogie = newBogie;
     m_outOfWorkState = false;
     m_bogieIdInBogiesContainer = idInContainer;
-    std::cout << "Robot zaczyna prace  z "  << m_pBogie->getGameName()  << m_pBogie->getDuration() <<std::endl;
+    // std::cout << "Robot zaczyna prace  z "  << m_pBogie->getGameName()  << m_pBogie->getDuration() <<std::endl;
     return true;
 }
 
