@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <iterator>
+#include <cstring>
 #include "../Inc/mine.hpp"
 
 int main(int argc, char * argv [])

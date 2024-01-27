@@ -1,4 +1,6 @@
 #include "../Inc/bogie.hpp"
+#include <cstring>
+
 
 
 void Bogie::Bogie::setGameName(std::string gameName)

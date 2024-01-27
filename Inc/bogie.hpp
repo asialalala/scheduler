@@ -2,6 +2,7 @@
 #define BOOGIE_HPP
 
 #include <iostream>
+#include <vector>
 
 namespace Bogie
 {

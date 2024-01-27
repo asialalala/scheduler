@@ -1,6 +1,8 @@
 #include "../Inc/mine.hpp"
 #include <vector>
 #include <iterator>
+#include <cstring>
+#include <iomanip>
 
 #define MAX_LENGTH 15 // czy tutaj?
 
