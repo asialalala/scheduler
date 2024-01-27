@@ -66,13 +66,12 @@ bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie, int idInContainer )
         // std::cout << "Robot nie moze zaczac pracy, poniewaz nie zakonczyl poprzedniej z wzokiem.\n" << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
         return false;
     }
-    
     Bogie::Bogie* newBogie = new Bogie::Bogie(pBogie->getStartTime(), pBogie->getID(),
-                             pBogie->getGameName(), pBogie->getWeight(), pBogie->getAmount());
+                             pBogie->getGameName(), pBogie->getWeight(), pBogie->getAmount(), pBogie->getDuration());
     m_pBogie = newBogie;
     m_outOfWorkState = false;
     m_bogieIdInBogiesContainer = idInContainer;
-    // std::cout << "Robot zaczyna prace  z " << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
+    std::cout << "Robot zaczyna prace  z "  << m_pBogie->getGameName()  << m_pBogie->getDuration() <<std::endl;
     return true;
 }
 

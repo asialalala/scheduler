@@ -14,6 +14,7 @@ Mine::Mine::Mine(int robotsNr, int quantum) : m_quantum(0), m_RRtime(0), m_lackO
         m_robotsContainer.push_back(Robot::Robot());
     }
     std::cout << "Kopalnia uruchomiona." << std::endl;
+    nr = 0;
 }
 
 Mine::Mine::~Mine()
@@ -306,8 +307,12 @@ bool Mine::Mine::checkIfEnd() {
     for(Robot::Robot& robot : m_robotsContainer)
     {
         if(robot.getTimeToEnd() > 0)
+        {
+            std::cout << "kontynuuj prace.\n";
             return false;
+        }
     }
+    std::cout << "Wszystkie skonczyly.\n";
     return true;
 }
 
@@ -367,8 +372,11 @@ int Mine::Mine::Schedule(std::string name)
 
 void Mine::Mine::ScheduleRR()
 {
+    for(Bogie::Bogie& bogie : m_bogieContainer)
+    {
+        std::cout << bogie.getGameName() << " " << bogie.getDuration() << std::endl; 
+    }
     std::cout << "Szeregowanie RR." << std::endl;
-    m_RRtime++;
 
     for(Robot::Robot& robot : m_robotsContainer)
     {
@@ -379,7 +387,7 @@ void Mine::Mine::ScheduleRR()
     // zakoncz dziaalnie tych robotow, ktore moge
     if(m_RRtime == m_quantum)
     {
-        std::cout << "wyczysc wszytskie roboty\n";
+        std::cout << "zakoncz prace  wszytskich robotow\n";
         // zakoncz dzaialnie wszystkich robotow                         musis jakos zliczac to od ktorego zaczac dodawac prace
         for(Robot::Robot& robot : m_robotsContainer)
         {
@@ -388,9 +396,11 @@ void Mine::Mine::ScheduleRR()
             if(bogieIdToUpdate != NONE_BOGIE)
             {
                 m_bogieContainer[bogieIdToUpdate].setDuration(timeOfWork);
-                m_bogieContainer[m_bogieContainerIterator].freeServed();
+                std::cout << "  Czas do zakonczenia po minieciu kwantu: " <<  m_bogieContainer[bogieIdToUpdate].getDuration() <<std::endl;
+                m_bogieContainer[bogieIdToUpdate].freeServed();
             }
         }
+        m_RRtime = 0;
 
     }else{
         std::cout << "sprawdzam, czy ktorys moze zakonczyc prce\n";
@@ -401,42 +411,58 @@ void Mine::Mine::ScheduleRR()
             if(bogieIdToUpdate != NONE_BOGIE)
             {
                 m_bogieContainer[bogieIdToUpdate].setDuration(timeOfWork);
-                m_bogieContainer[m_bogieContainerIterator].freeServed();
-            }
-                
+                m_bogieContainer[bogieIdToUpdate].freeServed();
+            }    
         }
     }
-
-
+    
+    
     
      if(!m_lackOfBogie || !m_endOfreading)
     {
-        if(m_lackOfBogie)
-            m_bogieContainerIterator = 0;
+        m_lackOfBogie = false;
+
+        m_bogieContainerIterator = ++m_bogieContainerIterator % (m_bogieContainer.size());
+        std::cout << "1. zmieniam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
+        int startShercingID = m_bogieContainerIterator;
         for(Robot::Robot& robot : m_robotsContainer)
         {
-            while((m_bogieContainer[m_bogieContainerIterator].getDuration() <= 0  || m_bogieContainer[m_bogieContainerIterator].getServedInfo() ) && m_bogieContainerIterator < (m_bogieContainer.size() - 1) )
+            while((m_bogieContainer[m_bogieContainerIterator].getDuration() <= 0  || m_bogieContainer[m_bogieContainerIterator].getServedInfo() ) && !m_lackOfBogie)
             {
-                std::cout << "zwiekszam m_bogieContainerIterator\n ";
-                m_bogieContainerIterator++;
-            }
-
-            if(robot.StartJob(&(m_bogieContainer[m_bogieContainerIterator]), m_bogieContainerIterator))    //jesli uda sie to przesunac iterator do nastepnego 
-            {
-                m_bogieContainer[m_bogieContainerIterator].setServed();
-                if(m_bogieContainerIterator < m_bogieContainer.size() - 1)  
+                std::cout <<  m_bogieContainerIterator << " +1 % " << (m_bogieContainer.size()) << std::endl;
+                m_bogieContainerIterator = ++m_bogieContainerIterator % (m_bogieContainer.size());
+                std::cout << "1. zmieniam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
+                std::cout << "startShercingID: " << startShercingID << std::endl;
+                if(m_bogieContainerIterator == startShercingID)
                 {
-                    m_bogieContainerIterator++;
-                }else{  // jesli nie ma juz wiecej wozkow
                     m_lackOfBogie = true;
-                    break;
                 }
-            }else{
-            std::cout << "nie udalo sie dodac wozka\n";
             }
-        }
-    }
 
-    
+            if(!m_lackOfBogie)
+            {
+                std::cout << "  podczas zaczecia pracy " << m_bogieContainer[m_bogieContainerIterator].getGameName() << m_bogieContainer[m_bogieContainerIterator].getDuration() <<std::endl;
+                if(robot.StartJob(&(m_bogieContainer[m_bogieContainerIterator]), m_bogieContainerIterator))    //jesli uda sie to przesunac iterator do nastepnego 
+                {
+                    std::cout << "dodano id " << m_bogieContainerIterator << std::endl;
+                    m_bogieContainer[m_bogieContainerIterator].setServed();
+
+                    if(m_bogieContainerIterator < (m_bogieContainer.size() - 1))
+                    {
+                        m_bogieContainerIterator++;
+                        std::cout << "2. zmieniam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
+                    }else{
+                        std::cout << "2. pozostawiam m_bogieContainerIterator na " << m_bogieContainerIterator << std::endl;
+                    }
+
+                    std::cout << "udalo sie dodac wozek\n";
+                }else{
+                std::cout << "nie udalo sie dodac wozka\n";
+                }
+            }
+        }   
+    }
+    nr++;
+    m_RRtime++;
 
 }

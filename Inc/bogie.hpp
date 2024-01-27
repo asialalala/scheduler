@@ -41,7 +41,11 @@ enum Game {
             Bogie(  int startTime, int ID,
                     std::string gameName, int weight,
                     int amount);
+            Bogie(   int startTime, int ID,
+                std::string gameName, int weight,
+                int amount, int duration);
             ~Bogie(){};
+
 
             void setmStartTime(int startTime) {m_startTime = startTime;};
             void setID(int ID) {m_ID = ID;};
@@ -49,6 +53,7 @@ enum Game {
             void setWeight(int weight){m_weight = weight;};
             void setAmount(int amount){m_amount = amount;};
             void setDuration(int time){m_duration = time;};
+            void setGameName(std::string gameName);
 
             int getStartTime()const {return m_startTime;};
             int getID() const {return m_ID;};

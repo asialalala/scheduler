@@ -1,16 +1,8 @@
 #include "../Inc/bogie.hpp"
 
-Bogie::Bogie::Bogie(   int startTime, int ID,
-                std::string gameName, int weight,
-                int amount): 
-                m_startTime(startTime),
-                m_ID(ID),
-                m_weight(weight),
-                m_amount(amount),
-                m_served(false)
+
+void Bogie::Bogie::setGameName(std::string gameName)
 {
-    m_duration = amount * weight;
-    
     int result = gameName.compare("rubiny");
     if(result == 0)
         m_game = rubiny;
@@ -75,8 +67,35 @@ Bogie::Bogie::Bogie(   int startTime, int ID,
     if(result == 0)
         m_game = aquamarines;
 
+}
+
+Bogie::Bogie::Bogie(   int startTime, int ID,
+                std::string gameName, int weight,
+                int amount): 
+                m_startTime(startTime),
+                m_ID(ID),
+                m_weight(weight),
+                m_amount(amount),
+                m_served(false)
+{
+    m_duration = amount * weight;
+    
+    setGameName(gameName);
     
     // std::cout << "  W chwili " << startTime << " dodano wozek z kamieniami " << getGameName() << " potrwa " << m_duration << std::endl;
+}
+
+Bogie::Bogie::Bogie(   int startTime, int ID,
+                std::string gameName, int weight,
+                int amount, int duration): 
+                m_startTime(startTime),
+                m_ID(ID),
+                m_weight(weight),
+                m_amount(amount),
+                m_served(false),
+                m_duration(duration)
+{
+    setGameName(gameName);
 }
 
 std::string Bogie::Bogie::getGameName() const
