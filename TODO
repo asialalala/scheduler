@@ -1,1 +1,3 @@
 - rozpoznac jak zarzadzac pamiecia podczas przekazywania wozka do robota
+- refactor stringów, bez C, tylko C++
+- uwspólnić kod, gdzie się da
