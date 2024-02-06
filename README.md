@@ -14,10 +14,10 @@ This project implements a scheduler with two types od scheduling: RR and FCFS.
 
 
 ## Setup
-'''
+```
 $ mkdir Build
 $ cd Build
 $ cmake ..
 $ make
 $ ./scheduler 2 1 ../Data/data.txt 2
-'''
+```
