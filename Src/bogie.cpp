@@ -1,71 +1,68 @@
 #include "../Inc/bogie.hpp"
-#include <cstring>
-
-
 
 void Bogie::Bogie::setGameName(std::string gameName)
 {
-    int result = gameName.compare("rubiny");
+    int result = gameName == "rubiny";
     if(result == 0)
         m_game = rubiny;
     
-    result = gameName.compare("agaty");
+    result = gameName == "agaty";
     if(result == 0)
         m_game = agaty;
     
-    result = gameName.compare("zloto");
+    result = gameName == "zloto";
     if(result == 0)
         m_game = zloto;
 
-    result = gameName.compare("turkus");
+    result = gameName == "turkus";
     if(result == 0)
         m_game = turkus;
     
-    result = gameName.compare("gold");
+    result = gameName == "gold";
     if(result == 0)
         m_game = gold;
 
-    result = gameName.compare("coconuts");
+    result = gameName == "coconuts";
     if(result == 0)
         m_game = coconuts;
 
-    result = gameName.compare("turquoise");
+    result = gameName == "turquoise";
     if(result == 0)
         m_game = turquoise;
 
-    result = gameName.compare("aventurines");
+    result = gameName == "aventurines";
     if(result == 0)
         m_game = aventurines;
 
-    result = gameName.compare("beryls");
+    result = gameName == "beryls";
     if(result == 0)
         m_game = beryls;
 
-    result = gameName.compare("sapphires");
+    result = gameName == "sapphires";
     if(result == 0)
         m_game = sapphires;
 
-    result = gameName.compare("emeralds");
+    result = gameName == "emeralds";
     if(result == 0)
         m_game = emeralds;
 
-    result = gameName.compare("opals");
+    result = gameName == "opals";
     if(result == 0)
         m_game = opals;
 
-    result = gameName.compare("amethysts");
+    result = gameName == "amethysts";
     if(result == 0)
         m_game = amethysts;
 
-    result = gameName.compare("topazes");
+    result = gameName == "topazes";
     if(result == 0)
         m_game = topazes;
 
-    result = gameName.compare("pearls");
+    result = gameName == "pearls";
     if(result == 0)
         m_game = pearls;
 
-    result = gameName.compare("aquamarines");
+    result = gameName == "aquamarines";
     if(result == 0)
         m_game = aquamarines;
 
