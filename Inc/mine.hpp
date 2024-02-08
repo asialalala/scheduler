@@ -13,13 +13,14 @@
 
 namespace Mine
 {
-    enum Strategy{
+    enum Strategy
+    {
         RR,
         FCFS
     };
 
-class Mine
-{
+    class Mine
+    {
     private:
         Bogie::BogieContainer m_bogieContainer;
         Strategy m_strategyName;
@@ -41,16 +42,14 @@ class Mine
         void ScheduleRR();
         bool checkIfEnd();
         bool m_added;
-    
+
     public:
         Mine(int robotsNr, int quantum);
         ~Mine();
-        int MineInit(char * argv []);
+        int MineInit(char *argv[]);
         int Schedule();
         int Schedule(std::string name);
-
-};
+    };
 } // Mine namespace
 
-
-#endif  // MINE_HPP
+#endif // MINE_HPP
