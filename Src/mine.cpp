@@ -6,8 +6,8 @@
 
 #define MAX_LENGTH 15 // czy tutaj?
 
-Mine::Mine::Mine(int robotsNr, int quantum) : m_quantum(0), m_RRtime(0), m_lackOfBogie(false), m_bogieContainerIterator(0),
-                                              m_arrivingBogieIterator(0), m_lastArrvied(-1), m_endOfreading(false)
+Mine::Mine::Mine(int robotsNr, int quantum) : m_bogieContainerIterator(0), m_arrivingBogieIterator(0),
+                                              m_lastArrvied(-1), m_lackOfBogie(false), m_endOfreading(false), m_quantum(0), m_RRtime(0)
 {
 
     m_robotsNr = robotsNr;
