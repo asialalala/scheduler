@@ -88,8 +88,9 @@ Bogie::Bogie::Bogie(int startTime, int ID,
                                                 m_ID(ID),
                                                 m_weight(weight),
                                                 m_amount(amount),
-                                                m_served(false),
-                                                m_duration(duration)
+                                                m_duration(duration),
+                                                m_served(false)
+                                                
 {
     setGameName(gameName);
 }
