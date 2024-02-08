@@ -10,7 +10,7 @@ Robot::Robot::Robot()
 
 int Robot::Robot::IncreaseWorkingTime()
 {
-    if(m_pBogie == nullptr)
+    if (m_pBogie == nullptr)
     {
         // std::cout << "Robot nie ma nad czym pracowac, wiec nie zwieksza godzin pracy\n";
         return m_workingTime;
@@ -22,11 +22,12 @@ int Robot::Robot::IncreaseWorkingTime()
 
 int Robot::Robot::FinishJob()
 {
-    if(m_pBogie == nullptr)
+    if (m_pBogie == nullptr)
     {
         // std::cout << "Robot nie moze zakonczyc pracy, bo i tak nad niczym nie pracuje\n";
         return -1;
-    }else if(getTimeToEnd() > 0)
+    }
+    else if (getTimeToEnd() > 0)
     {
         // std::cout << "Robot nie moze zakonczyc pracy, bo za krotko rozpakowywal wozek.\n";
         // std::cout << "      " << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
@@ -38,12 +39,12 @@ int Robot::Robot::FinishJob()
     m_pBogie = nullptr;
     m_outOfWorkState = true;
     m_workingTime = 0;
-    return temp;    // zwroc numer wozka w kontenerze
+    return temp; // zwroc numer wozka w kontenerze
 }
 
 int Robot::Robot::FinishJobForced()
 {
-    if(m_pBogie == nullptr)
+    if (m_pBogie == nullptr)
     {
         // std::cout << "Robot nie moze zakonczyc pracy, bo i tak nad niczym nie pracuje\n";
         return -1;
@@ -54,20 +55,19 @@ int Robot::Robot::FinishJobForced()
     m_pBogie = nullptr;
     m_outOfWorkState = true;
     m_workingTime = 0;
-    return temp;    // zwroc numer wozka w kontenerze
+    return temp; // zwroc numer wozka w kontenerze
 }
 
-
-bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie, int idInContainer )
+bool Robot::Robot::StartJob(Bogie::Bogie *const pBogie, int idInContainer)
 {
     // std::cout << "Proba przypisania wozka o ID: " << pBogie->getID();
-    if(m_pBogie != nullptr)
+    if (m_pBogie != nullptr)
     {
         // std::cout << "Robot nie moze zaczac pracy, poniewaz nie zakonczyl poprzedniej z wzokiem.\n" << m_pBogie->getID() << " " << m_pBogie->getGameName() <<std::endl;
         return false;
     }
-    Bogie::Bogie* newBogie = new Bogie::Bogie(pBogie->getStartTime(), pBogie->getID(),
-                             pBogie->getGameName(), pBogie->getWeight(), pBogie->getAmount(), pBogie->getDuration());
+    Bogie::Bogie *newBogie = new Bogie::Bogie(pBogie->getStartTime(), pBogie->getID(),
+                                              pBogie->getGameName(), pBogie->getWeight(), pBogie->getAmount(), pBogie->getDuration());
     m_pBogie = newBogie;
     m_outOfWorkState = false;
     m_bogieIdInBogiesContainer = idInContainer;
@@ -75,9 +75,9 @@ bool Robot::Robot::StartJob(Bogie::Bogie* const pBogie, int idInContainer )
     return true;
 }
 
-Bogie::Bogie* Robot::Robot::getBogie()
+Bogie::Bogie *Robot::Robot::getBogie()
 {
-    if(m_pBogie == nullptr)
+    if (m_pBogie == nullptr)
     {
         // std::cout << "Robot oddaje pusty wskaznik, bo nad niczym nie pracuje\n";
     }
@@ -86,7 +86,7 @@ Bogie::Bogie* Robot::Robot::getBogie()
 
 int const Robot::Robot::getTimeToEnd() const
 {
-    if(m_pBogie == nullptr)
+    if (m_pBogie == nullptr)
     {
         //  std::cout << " Robot nad niczym nie pracuje, czas od zakonczenia: 0 \n";
         return 0;
