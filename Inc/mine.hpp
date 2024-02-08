@@ -25,7 +25,6 @@ namespace Mine
         Bogie::BogieContainer m_bogieContainer;
         Strategy m_strategyName;
         Robot::RobotsContainer m_robotsContainer;
-        int m_timeQuantum;
         int m_robotsNr;
         int m_bogieContainerIterator;
         int m_arrivingBogieIterator;

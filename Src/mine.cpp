@@ -72,7 +72,6 @@ int Mine::Mine::UploadBogieContainer()
 {
     // std::cout << "Kopalnia wczytuje harmonogram." << std::endl;
     std::string temp = "";
-    int spacePlace = 0;
     int time = 0;
     int ID = 0;
     std::string game = "";
@@ -138,8 +137,6 @@ int Mine::Mine::UploadBogieContainer(std::string name)
     std::string game = "";
     int weight = 0;
     int amount = 0;
-    int i = 0;
-    bool startTask = false;
 
     if (myfile.is_open())
     {
@@ -261,7 +258,6 @@ void Mine::Mine::Report(int time) // tutaj przydałoby sie zrobic consta
 void Mine::Mine::ScheduleFCFS()
 {
     //  std::cout << "Szeregowanie FCFS." << std::endl;
-    int i = 0;
 
     for (Robot::Robot &robot : m_robotsContainer)
     {
